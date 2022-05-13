@@ -5,7 +5,7 @@ import unittest
 class TestCore(unittest.TestCase):
     """Test methods class."""
 
-    def test_float(self):
+    def test(self):
         """Square test."""
         self.assertAlmostEqual(2.**2, 4.)
 
