@@ -3,8 +3,8 @@ Tensor network
 
 Lessons by Jorge.
 
-References and authors
-----------------------
+Authors
+-------
 
 -> Dott. Jorge
 

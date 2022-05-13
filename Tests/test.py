@@ -7,7 +7,7 @@ class TestCore(unittest.TestCase):
 
     def test_float(self):
         """Square test."""
-        self.assertAlmostEqual(square(2.), 4.)
+        self.assertAlmostEqual(2.**2, 4.)
 
 if __name__ == "__main__":
     unittest.main()
