@@ -1,7 +1,7 @@
 Numerical methods for physics
 =============================
-.. image:: https://app.travis-ci.com/Dario-Caf/Numerical_methods.svg?branch=main
-    :target: https://app.travis-ci.com/Dario-Caf/Numerical_methods
+.. image:: https://app.travis-ci.com/Dario-Maglio/Numerical_methods.svg?branch=main
+    :target: https://app.travis-ci.com/Dario-Maglio/Numerical_methods
 
 
 
