@@ -57,17 +57,17 @@ int main() {
             q = q_try;
         }
         
- 	sample_average = sample_average + q;
+        sample_average = sample_average + q;
         file_m << it << " " << q << endl;
         
         // calculate the average average	
-	if ((it/DIM_SAMPLING) != n) {
-	    sample_average = sample_average / DIM_SAMPLING;
-	    file_a << n << " " << sample_average << endl;
-	    sample_ave_average = sample_ave_average + sample_average;
-	    sample_average=0.;
-	    n+=1;
-	}
+      	if ((it/DIM_SAMPLING) != n) {
+	         sample_average = sample_average / DIM_SAMPLING;
+	         file_a << n << " " << sample_average << endl;
+	         sample_ave_average = sample_ave_average + sample_average;
+	         sample_average=0.;
+	         n+=1;
+         	}
     }
     
     cout << n << " " << sample_ave_average/n << endl; 
