@@ -8,7 +8,7 @@ os.system('./main')
 
 a = np.loadtxt('random.dat', unpack='True')
 
-#os.system('rm main random.dat')
+os.system('rm main random.dat')
 
 x = a[1, 0:-2]
 y = a[1, 1:-1]

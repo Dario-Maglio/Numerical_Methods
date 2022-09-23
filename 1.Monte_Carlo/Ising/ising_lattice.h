@@ -1,6 +1,6 @@
 /*******************************************************************************
 *
-* Lattice class definition
+* Lattice class definition and PRNG
 *
 *******************************************************************************/
 
@@ -33,17 +33,16 @@ private:
 
 public:
     const int side_lenght, geometry_flag, initial_flag;
-    lattice(const int &L = 5, const int &G_FLAG = 0, const int &I_FLAG = 0):
-        side_lenght(L),
+    lattice(const int &SIDE = 5, const int &G_FLAG = 0, const int &I_FLAG = 0):
+        side_lenght(SIDE),
         geometry_flag(G_FLAG),
         initial_flag(I_FLAG)
     {/************************** Class constructor ****************************/
 
         // Defining topology and nearest neighbors list
-
         vector<int> nearest_list;
 
-        if (geometry_flag == 0) {
+        if (geometry_flag == 1) {
             /* 1D lattice with PBC */
 
             tot_lenght_ = side_lenght;
@@ -70,7 +69,7 @@ public:
             }
             nearest_list.clear();
 
-        } else if (geometry_flag == 1) {
+        } else if (geometry_flag == 2) {
             /* 2D square lattice with PBC */
 
             tot_lenght_ = side_lenght * side_lenght;
@@ -164,18 +163,17 @@ public:
 
     }/************************* Class methods *********************************/
 
+    /* Print the lattice configuration */
     void show_configuration(){
-        /* Print the lattice configuration */
-
         cout << "Lattice configuration: " << endl;
 
-        if (geometry_flag == 0){
+        if (geometry_flag == 1){
             for (int i = 0; i < tot_lenght_; i++){
                 cout << lattice_[i] << " ";
             }
             cout << endl << endl;
 
-        } else if (geometry_flag == 1){
+        } else if (geometry_flag == 2){
             for (int i = 0; i < tot_lenght_; i++){
                 cout << lattice_[i] << " ";
                 if ((i + 1) % side_lenght == 0){
@@ -186,9 +184,8 @@ public:
         }
     }
 
+    /* Save the current configuration of the lattice */
     void save_configuration(){
-        /* Save the current configuration of the lattice */
-
         ofstream file;
         file.open ("lattice_configuration.dat");
         for (int i = 0; i < tot_lenght_; i++){
@@ -197,9 +194,8 @@ public:
         file.close();
     }
 
+    /* Print the nearest neighbors of the site index */
     void show_nearest_index(const int &index){
-        /* Print the nearest neighbors of the site index */
-
         int size;
         size = nearest_neighbors_[index].size();
 
@@ -207,10 +203,9 @@ public:
             cout << nearest_neighbors_[index][i] << " ";
         }
     }
-
+    
+    /* Print the list of all nearest neighbors to each lattice site */
     void show_nearest_neighbors(){
-        /* Print the list of all nearest neighbors to each lattice site */
-
         for (int i = 0; i < tot_lenght_; i++){
             cout << "Nearest neighbors to " << i << " are: ";
             show_nearest_index(i);

@@ -3,12 +3,12 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 
-os.system('g++ metropolis.cpp -o main')
+os.system('g++ anna_met.cpp -o main')
 os.system('./main')
 
 a = np.loadtxt('f_metropolis.dat', unpack='True')
 
-#os.system('rm main random.dat')
+os.system('rm main')
 
 x = a[0, 10000:]
 y = a[1, 10000:]
