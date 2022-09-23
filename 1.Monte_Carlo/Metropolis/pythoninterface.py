@@ -8,7 +8,7 @@ os.system('./main')
 
 a = np.loadtxt('f_metropolis.dat', unpack='True')
 
-#os.system('rm main random.dat')
+os.system('rm main')
 
 x = a[0, 10000:]
 y = a[1, 10000:]
