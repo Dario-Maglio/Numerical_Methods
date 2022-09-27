@@ -36,6 +36,13 @@ int main(){
     ising.show_configuration();
 
     ising.save_configuration();
+    ising.sum_nearest_neighbors_site();
 
-    ising.show_nearest_neighbors();
+    //ising.show_nearest_neighbors();
+
+    lattice ising2(SIDE, G_FLAG, 2);
+    
+    ising2.show_configuration();
+
+
 }

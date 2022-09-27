@@ -213,6 +213,33 @@ public:
         }
     }
 
+
+    /* Sum all lattice elements */
+    void sum_lattice_elements(){
+       int sum = 0;
+       for(int i = 0; i < tot_lenght_; i++ ) {
+           sum += lattice_[i];  
+       }
+       
+       cout << sum << endl;
+    }
+
+    /* Sum nearest neighbors of every site*/
+    void sum_nearest_neighbors_site(){
+        int sum1 = 0;
+        for(int i = 0; i < tot_lenght_; i++){
+           int size = nearest_neighbors_[i].size();
+            for(int j = 0; j < size; j++){
+                sum1 += nearest_neighbors_[i][j];   
+            }
+            cout << sum1 << endl;
+        }
+           
+   
+     }
+
+
+
 };/************************* End class ****************************************/
 
 //------------------------------------------------------------------------------
