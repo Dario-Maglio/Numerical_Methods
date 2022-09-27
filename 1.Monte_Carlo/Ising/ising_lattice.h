@@ -203,7 +203,7 @@ public:
             cout << nearest_neighbors_[index][i] << " ";
         }
     }
-    
+
     /* Print the list of all nearest neighbors to each lattice site */
     void show_nearest_neighbors(){
         for (int i = 0; i < tot_lenght_; i++){
@@ -215,30 +215,31 @@ public:
 
 
     /* Sum all lattice elements */
-    void sum_lattice_elements(){
+    int sum_lattice_elements(){
        int sum = 0;
        for(int i = 0; i < tot_lenght_; i++ ) {
-           sum += lattice_[i];  
+           sum += lattice_[i];
        }
-       
-       cout << sum << endl;
+
+       return sum;
     }
 
-    /* Sum nearest neighbors of every site*/
+    /* Sum nearest neighbors of every site */
     void sum_nearest_neighbors_site(){
-        int sum1 = 0;
+        vector<int> lattice_2;
+        lattice_2.reserve(tot_lenght_);
+
         for(int i = 0; i < tot_lenght_; i++){
-           int size = nearest_neighbors_[i].size();
+            int size = nearest_neighbors_[i].size();
+            lattice_2.push_back(0);
             for(int j = 0; j < size; j++){
-                sum1 += nearest_neighbors_[i][j];   
+                lattice_2[i] += lattice_[nearest_neighbors_[i][j]];
             }
-            cout << sum1 << endl;
         }
-           
-   
+
+        lattice_ = lattice_2;
+        lattice_2.clear();
      }
-
-
 
 };/************************* End class ****************************************/
 
