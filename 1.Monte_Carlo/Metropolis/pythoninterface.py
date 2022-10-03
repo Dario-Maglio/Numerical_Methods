@@ -3,9 +3,11 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 
-os.system('g++ metropolis.cpp -o main')
-os.system('./main')
-os.system('rm main')
+# os.system('g++ metropolis.cpp -o main')
+# os.system('./main')
+# os.system('rm main')
+
+#-------------------------------------------------------------------------------
 
 a = np.loadtxt('f_metropolis.dat', unpack='True')
 
@@ -21,10 +23,14 @@ plt.ylabel('Evolution')
 plt.legend(loc='lower right')
 
 plt.figure("MC histogram gaussian")
-plt.title("Histogram of the MC steps" + "\n" + "average = 5. , sigma = 0.5")
+plt.title("Histogram of the MC steps" + "\n" + "average = 5. , sigma = 1.")
 plt.hist(y2, bins=500)
 plt.ylabel('Counting')
 plt.xlabel('MC step')
+
+plt.show()
+
+#-------------------------------------------------------------------------------
 
 a = np.loadtxt('f_averages.dat', unpack='True')
 x = [i+1 for i in range(len(a))]
@@ -36,7 +42,15 @@ plt.figure("MC averages gaussian")
 plt.title("Scatter of the sample averages")
 plt.scatter(x, a, marker='.')
 plt.ylabel('Average')
-plt.ylim([0, 7])
+plt.ylim([0, 7.1])
 plt.xlabel('Sample')
 
 plt.show()
+
+#-------------------------------------------------------------------------------
+
+y1 = y1[5000:15000]
+print("10000 steps sample")
+print(f"The average is {np.average(y1)} +- {np.sqrt(np.var(y1)/(len(y1) - 1))}")
+print("Complete sample")
+print(f"The average is {np.average(y2)} +- {np.sqrt(np.var(y2)/(len(y2) - 1))}")

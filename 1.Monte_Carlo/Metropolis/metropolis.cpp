@@ -16,7 +16,7 @@
 #define SEED 42
 
 #define AVERAGE 5.0
-#define SIGMA 0.5
+#define SIGMA 1.
 #define START 0.
 #define DELTA 0.1
 
