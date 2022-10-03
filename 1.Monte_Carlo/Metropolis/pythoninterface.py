@@ -5,26 +5,38 @@ import matplotlib.pyplot as plt
 
 os.system('g++ metropolis.cpp -o main')
 os.system('./main')
+os.system('rm main')
 
 a = np.loadtxt('f_metropolis.dat', unpack='True')
 
-os.system('rm main')
-
-x = a[0, :]
-y = a[1, :]
+x = [i+1 for i in range(15000)]
+y1 = a[:15000]
+y2 = a[15000:]
 
 plt.figure("MC evolution gaussian")
-plt.plot(x, y, marker='+', markersize=0.1, label='MC points')
-plt.xlabel('Evolution')
-plt.ylabel('Distribution')
+plt.title("Thermalization" + "\n" + "Sequence of 15000 Metropolis steps")
+plt.plot(x, y1, marker='.', markersize=0.1, label='MC points')
+plt.xlabel('Step')
+plt.ylabel('Evolution')
 plt.legend(loc='lower right')
 
-y = y[15000:]
-
 plt.figure("MC histogram gaussian")
-plt.hist(y, label='MC points', bins=500)
-plt.ylabel('Probability density function')
-plt.xlabel('Domain')
-plt.legend(loc='upper right')
+plt.title("Histogram of the MC steps" + "\n" + "average = 5. , sigma = 0.5")
+plt.hist(y2, bins=500)
+plt.ylabel('Counting')
+plt.xlabel('MC step')
+
+a = np.loadtxt('f_averages.dat', unpack='True')
+x = [i+1 for i in range(len(a))]
+
+a = a[15:]
+x = x[15:]
+
+plt.figure("MC averages gaussian")
+plt.title("Scatter of the sample averages")
+plt.scatter(x, a, marker='.')
+plt.ylabel('Average')
+plt.ylim([0, 7])
+plt.xlabel('Sample')
 
 plt.show()

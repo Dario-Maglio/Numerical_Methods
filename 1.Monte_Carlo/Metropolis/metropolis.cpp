@@ -11,12 +11,12 @@
 #include <random>        // import mt19937 periodo di 2^19937 − 1
 #include <cmath>
 
-#define N_STEPS 101000
+#define N_STEPS 1015000
 #define DIM_SAMPLING 1000
 #define SEED 42
 
 #define AVERAGE 5.0
-#define SIGMA 1.0
+#define SIGMA 0.5
 #define START 0.
 #define DELTA 0.1
 
@@ -34,7 +34,6 @@ inline double prf(double q, double q_try) {
 
 /* Main program */
 int main() {
-    int n=0;
     double x, y, q_try, q=START, sample_average=0., sample_ave_average=0.;
 
     // create files
@@ -47,7 +46,7 @@ int main() {
     uniform_real_distribution<double> prng(0.0, 1.0);
 
     // Metropolis-Hastings
-    for(int it=0; it!=N_STEPS; it++){
+    for(int it=1; it<=N_STEPS; it++){
         x = prng(generator);
         y = prng(generator);
 
@@ -60,19 +59,18 @@ int main() {
         }
 
         sample_average = sample_average + q;
-        file_m << it << " " << q << endl;
+        file_m << q << endl;
 
         // calculate the average average
-      	if ((it/DIM_SAMPLING) != n) {
+      	if ((it % DIM_SAMPLING) == 0) {
 	         sample_average = sample_average / DIM_SAMPLING;
-	         file_a << n << " " << sample_average << endl;
+	         file_a << sample_average << endl;
 	         sample_ave_average = sample_ave_average + sample_average;
 	         sample_average=0.;
-	         n+=1;
          	}
     }
 
-    cout << n << " " << sample_ave_average/n << endl;
+    cout << sample_ave_average / (N_STEPS / DIM_SAMPLING)  << endl;
 
     // close files
     file_m.close();
