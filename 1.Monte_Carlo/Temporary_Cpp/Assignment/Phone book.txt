@@ -1,4 +1,0 @@
-Giovanni, 3286243153, abc@unipi.it
-Miovi, , 
-Aiovi, +39329, hafg@pg
-Bruno, 3286243153, hag@gma
