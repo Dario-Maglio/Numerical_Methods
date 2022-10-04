@@ -3,16 +3,16 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 
-
+THERMALIZATION = 15000
 
 #-------------------------------------------------------------------------------
 
 def plot_metropolis():
-    a = np.loadtxt('f_metropolis.dat', unpack='True')
+    a = np.loadtxt('file_metropol.dat', unpack='True')
 
-    x = [i+1 for i in range(15000)]
-    y1 = a[:15000]
-    y2 = a[15000:]
+    x = [i+1 for i in range(THERMALIZATION)]
+    y1 = a[:THERMALIZATION]
+    y2 = a[THERMALIZATION:]
 
     plt.figure("MC evolution gaussian")
     plt.title("Thermalization" + "\n" + "Sequence of 15000 Metropolis steps")
@@ -30,11 +30,8 @@ def plot_metropolis():
     plt.show()
 
 def plot_averages():
-    a = np.loadtxt('f_averages.dat', unpack='True')
+    a = np.loadtxt('file_averages.dat', unpack='True')
     x = [i+1 for i in range(len(a))]
-
-    a = a[15:]
-    x = x[15:]
 
     plt.figure("MC averages gaussian")
     plt.title("Scatter of the sample averages")
@@ -46,7 +43,7 @@ def plot_averages():
     plt.show()
 
 def plot_autocorr():
-    a = np.loadtxt('f_autocorr.dat', unpack='True')
+    a = np.loadtxt('file_autocor.dat', unpack='True')
     x = [i+1 for i in range(len(a))]
 
     plt.figure("MC autocorrelation")
@@ -55,7 +52,7 @@ def plot_autocorr():
     plt.ylabel('C(k)')
     plt.xlabel('k')
 
-    a = np.loadtxt('f_tau_int.dat', unpack='True')
+    a = np.loadtxt('file_tau_int.dat', unpack='True')
     x = [i+1 for i in range(len(a))]
 
     plt.figure("MC autocorrelation time")
@@ -69,12 +66,12 @@ def plot_autocorr():
 #-------------------------------------------------------------------------------
 
 if __name__ == '__main__':
-    os.system('g++ metropolis.cpp -o main')
-    os.system('./main')
-    os.system('rm main')
+    # os.system('g++ metropolis.cpp -o main')
+    # os.system('./main')
+    # os.system('rm main')
 
-    # plot_metropolis()
+    plot_metropolis()
 
-    # plot_averages()
+    plot_averages()
 
     plot_autocorr()
