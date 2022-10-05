@@ -14,15 +14,17 @@
 
 #define SEED 42
 #define N_STEPS 10015000           // dim of sample to generate
-#define DIM_SAMPLING 10000         // dim of subsamples for calculating averages
-#define DIM_SUBSAMP 4194304        // dim of subsample for autocorrelation 2^22
+#define DIM_SUBSAMP 1000000        // dim of subsample to study 2^22 4194304
 #define DIM_THERM 15000            // dim of subsample for thermalization
-#define NUM_FAKESAMPLES 100        // num of fake samples
 
-#define AVERAGE 5.0
+#define DIM_SAMPLING 10000         // dim of subsamples for calculating averages
+#define NUM_FAKESAMPLES 300        // num of fake samples bootstrap
+#define CORREL_LENGHT 65536        // dim of the correlated block bootstrap 2^16
+
+#define AVERAGE 0.                 // 5. in other cases
 #define SIGMA 1.
 #define START 0.
-#define DELTA 0.1                  // delta circa 3-4 sigma gives the best err
+#define DELTA 3.                   // 0.1 in other cases
 
 using namespace std;
 
@@ -135,112 +137,132 @@ double autocorrelation(vector<double>& x, float x_ave){
     return sigma;
 }
 
-/* Bootstrap without autocorrelation */
-double bootstrap_step(vector<double>& x){
+/* Estimator to be evaluated on the sample*/
+inline double estimator(vector<double>& x){
     int steps = size(x);
-    double x_fake, fake_ave = 0.;
-    vector<double> fake;
-    fake.reserve(steps);
+    double pow2 = 0., pow4 = 0.;
 
     for (int i = 0; i < steps; i++){
-        x_fake = x[randomint(generator)];
-        fake_ave += x_fake;
-        fake.push_back(x_fake);
+        pow2 += pow(x[i],2);
+        pow4 += pow(x[i],4);
     }
-    fake.clear();
 
-    fake_ave = fake_ave / steps;
-    return fake_ave;
+    pow4 = (pow4 * steps) / (3 * pow2 * pow2);
+    return pow4;
 }
 
+/* Bootstrap without autocorrelation */
 double bootstrap(vector<double>& x, int num_fake_samples){
-    double fake_ave, fake_ave_ave = 0., sigma = 0.;
-    vector<double> fake_averages;
-    fake_averages.reserve(num_fake_samples);
+    int steps = size(x);
+    double value, fake_ave, sigma;
+    vector<double> fake_sample, fake_values;
 
+    fake_sample.reserve(steps);
+
+    // Create the file for sigma(k)
     ofstream file_boot;
-    file_boot.open("file_boot.dat");
+    file_boot.open("file_boot_w.dat");
 
-    for (int k = 5; k <= num_fake_samples; k += 5){
-        fake_ave_ave = 0.;
-        for (int i = 0; i < k; i++){
-            fake_ave = bootstrap_step(x);
-            fake_ave_ave += fake_ave;
-            fake_averages.push_back(fake_ave);
+    // Iterate over different k = number of fake samples
+    for (int k = 10; k <= num_fake_samples; k += 10){
+
+        fake_ave = 0.;
+        fake_values.reserve(k);
+        // Iterate over each fake sample
+        for (int j = 0; j < k; j++){
+            // Generate the j-fake_sample
+            for (int i = 0; i < steps; i++){
+                fake_sample.push_back(x[randomint(generator)]);
+            }
+
+            // Compute the estimator and store it
+            value = estimator(fake_sample);
+            fake_sample.clear();
+            fake_ave += value;
+            fake_values.push_back(value);
         }
-        fake_ave_ave = fake_ave_ave / k;
+        fake_ave = fake_ave / k;
 
+        // Compute the variance of k fake samples
         sigma = 0.;
-        for (int i = 0; i < k; i++){
-            sigma += pow(fake_averages[i], 2);
-        }
+        for (auto val : fake_values) sigma += pow(val, 2);
         sigma = sigma / k;
-        sigma = sigma - pow(fake_ave_ave, 2);
+        sigma = sigma - pow(fake_ave, 2);
         sigma = sqrt(sigma);
 
-        fake_averages.clear();
+        fake_values.clear();
+
+        cout << "logging: num fake samp " << k << " -> ";
+        cout << fake_ave << " ± " << sigma << endl;
+
+        // Save the sigma(k) to the file
         file_boot << k << " " << sigma << endl;
-        cout << "logging: sigma at " << k << " is " << sigma << endl;
     }
 
+    // Close and return sigma(num_fake_samples)
     file_boot.close();
     return sigma;
 }
 
 /* Bootstrap with autocorrelation */
-double bootstrap_corr_step(vector<double>& x, int k){
-    int index, num_block, steps = size(x);
-    double x_fake, fake_ave = 0.;
-    vector<double> fake;
-    fake.reserve(steps);
+double bootstrap_corr(vector<double>& x, int num_fake_samples, int max_lenght){
+    int steps = size(x), draws, index, l;
+    double value, fake_ave, sigma;
+    vector<double> fake_sample, fake_values;
 
-    num_block = steps / pow(2, k);
+    fake_sample.reserve(steps);
+    fake_values.reserve(num_fake_samples);
 
-    for (int i = 0; i < num_block; i++){
-        index = randomint(generator);
-        for (int j = 0; j < pow(2, k); j++){
-            if (index + j == steps) index = index - steps;
-            x_fake = x[index + j];
-            fake_ave += x_fake;
-            fake.push_back(x_fake);
-        }
-    }
-    fake.clear();
-
-    fake_ave = fake_ave / steps;
-    return fake_ave;
-}
-
-double bootstrap_corr(vector<double>& x, int num_fake_samples){
-    double fake_ave, fake_ave_ave = 0., sigma = 0.;
-    vector<double> fake_averages;
-    fake_averages.reserve(num_fake_samples);
-
+    // Create the file for sigma(k)
     ofstream file_boot;
-    file_boot.open("file_boot_corr.dat");
+    file_boot.open("file_boot_c.dat");
 
-    for (int k = 5; k < 16; k++){
-        fake_ave_ave = 0.;
+    // Iterate over different lenght of the correlated blocks
+    for (int lenght = 1; lenght <= max_lenght; lenght *= 2){
+
+        fake_ave = 0.;
+        draws = 1 + ((steps - 1) / lenght);
+        // Iterate over each fake sample
         for (int i = 0; i < num_fake_samples; i++){
-            fake_ave = bootstrap_corr_step(x, k);
-            fake_ave_ave += fake_ave;
-            fake_averages.push_back(fake_ave);
-        }
-        fake_ave_ave = fake_ave_ave / num_fake_samples;
 
+            // Generate the i-fake_sample
+            for (int j = 0; j < draws; j++){
+                // Extract the j-random_int
+                index = randomint(generator);
+                // Push the j-block
+                l = 0;
+                while (l < lenght && size(fake_sample) < steps){
+                    if (index + l == steps) index = index - steps;
+                    fake_sample.push_back(x[index + l]);
+                    l++;
+                }
+            }
+
+            // Compute the estimator and store it
+            value = estimator(fake_sample);
+            fake_sample.clear();
+            fake_ave += value;
+            fake_values.push_back(value);
+        }
+        fake_ave = fake_ave / num_fake_samples;
+
+        // Compute the variance of k fake samples
         sigma = 0.;
-        for (int i = 0; i < num_fake_samples; i++){
-            sigma += pow(fake_averages[i], 2);
-        }
+        for (auto val : fake_values) sigma += pow(val, 2);
         sigma = sigma / num_fake_samples;
-        sigma = sigma - pow(fake_ave_ave, 2);
+        sigma = sigma - pow(fake_ave, 2);
         sigma = sqrt(sigma);
 
-        fake_averages.clear();
-        file_boot << k << " " << sigma << endl;
-        cout << "logging: sigma at " << k << " is " << sigma << endl;
+        fake_values.clear();
+
+        cout << "logging: correl lenght " << lenght << " -> ";
+        cout << fake_ave << " ± " << sigma << endl;
+
+        // Save the sigma(lenght) to the file
+        file_boot << lenght << " " << sigma << endl;
     }
 
+    // Close and return sigma(circa max_lenght)
     file_boot.close();
     return sigma;
 }
@@ -262,7 +284,7 @@ int main() {
     sigma = bootstrap(data, NUM_FAKESAMPLES);
     cout << "Bootstrap gives: " << sigma << endl;
 
-    sigma = bootstrap_corr(data, NUM_FAKESAMPLES);
+    sigma = bootstrap_corr(data, NUM_FAKESAMPLES, CORREL_LENGHT);
     cout << "Bootstrap corr gives: " << sigma << endl;
 
     return 0;
