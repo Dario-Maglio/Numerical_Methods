@@ -31,7 +31,7 @@ using namespace std;
 // define the PRNG
 mt19937_64 generator(SEED);
 uniform_real_distribution<double> prng(0.0, 1.0);
-uniform_int_distribution randomint(0, DIM_SUBSAMP);
+uniform_int_distribution<int> randomint(0, DIM_SUBSAMP);
 
 //---- Contents ----------------------------------------------------------------
 
@@ -106,7 +106,8 @@ double load_and_average(int dim_therm, int dim_subsample, vector<double>& x){
 
 /* Autocorrelation function, variance and error */
 double autocorrelation(vector<double>& x, float x_ave){
-    int k = 0, steps = size(x);
+    int k = 0;
+    int steps = x.size();
     double value = 1., tau_int = 0., var_bias = 0., sigma;
 
     // compute the biased variance
@@ -139,7 +140,7 @@ double autocorrelation(vector<double>& x, float x_ave){
 
 /* Estimator to be evaluated on the sample*/
 inline double estimator(vector<double>& x){
-    int steps = size(x);
+    int steps = x.size();
     double pow2 = 0., pow4 = 0.;
 
     for (int i = 0; i < steps; i++){
@@ -153,7 +154,7 @@ inline double estimator(vector<double>& x){
 
 /* Bootstrap without autocorrelation */
 double bootstrap(vector<double>& x, int num_fake_samples){
-    int steps = size(x);
+    int steps = x.size();
     double value, fake_ave, sigma;
     vector<double> fake_sample, fake_values;
 
@@ -206,7 +207,7 @@ double bootstrap(vector<double>& x, int num_fake_samples){
 
 /* Bootstrap with autocorrelation */
 double bootstrap_corr(vector<double>& x, int num_fake_samples, int max_lenght){
-    int steps = size(x), draws, index, l;
+    int steps = x.size(), draws, index, l;
     double value, fake_ave, sigma;
     vector<double> fake_sample, fake_values;
 
@@ -231,7 +232,7 @@ double bootstrap_corr(vector<double>& x, int num_fake_samples, int max_lenght){
                 index = randomint(generator);
                 // Push the j-block
                 l = 0;
-                while (l < lenght && size(fake_sample) < steps){
+                while (l < lenght && fake_sample.size() < steps){
                     if (index + l == steps) index = index - steps;
                     fake_sample.push_back(x[index + l]);
                     l++;
@@ -266,6 +267,44 @@ double bootstrap_corr(vector<double>& x, int num_fake_samples, int max_lenght){
     file_boot.close();
     return sigma;
 }
+
+double blocking(int blocking_iteration, vector<double>& x){
+    int steps = x.size(), k_steps = steps;
+    double x_ave = 0., qsigma;
+    vector<double> x_k;
+
+    // compute average 
+    for(int i = 0; i < steps; i++) x_ave += x[i];
+    x_ave = x_ave / steps;
+
+    // compute variance 
+    for(int j = 0; j < steps; j++) qsigma += pow(x[j] - x_ave, 2);
+    qsigma = qsigma/(pow(steps, 2) - steps);
+
+    // start blocking algorithm
+    for(int n = 0; n < steps; n++) x_k[n] = x[n];
+
+    for(int k = 1; k <= blocking_iteration; k++){
+        k_steps = k_steps / 2;
+        x_ave = 0;
+        qsigma = 0;
+        for(int j = 0; j < k_steps; j++){
+            x_k[j] = (x_k[2*j] + x_k[2*j + 1]) / 2; 
+            x_ave += x_k[j];
+        }
+        x_ave = x_ave / k_steps;
+
+        for(int j = 0; j < k_steps; j++) qsigma += pow(x_k[j] - x_ave, 2);
+        qsigma = qsigma/(pow(k_steps, 2) - k_steps);
+
+
+        cout << "logging: k steps " << k << " -> ";
+        cout << fake_ave << " ± " << sqrt(qsigma) << endl; 
+    }
+
+  return sqrt(qsigma);
+}
+
 
 //---- Main --------------------------------------------------------------------
 

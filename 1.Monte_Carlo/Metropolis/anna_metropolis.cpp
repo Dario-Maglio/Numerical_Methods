@@ -33,7 +33,7 @@ using namespace std;
 // define the PRNG
 mt19937_64 generator(SEED);
 uniform_real_distribution<double> prng(0.0, 1.0);
-//uniform_int_distribution randomint(0, DIM_SUBSAMP);
+uniform_int_distribution<int> randomint(0, DIM_SUBSAMP);
 
 //----Contents-----------------------------------------------------
 
@@ -57,10 +57,31 @@ void box_muller(){
         y1=r*cos(p)*sqrt(2);                  // ! varianza 1/rad(2) 
         y2=r*sin(p)*sqrt(2);
         
-        file_b << i << " " << y1 << " " << y2 << endl;
+        //file_b << i << " " << y1 << " " << y2 << endl;
+        file_b << y1 << endl << y2 << endl;
     }
     
     file_b.close();
+
+}
+
+/* load box muller data in a vector*/
+void load_box_muller(vector<double> &y){
+    int steps = 0;
+    double value;
+    ifstream data_bm("file_box_muller.dat");
+
+      if (data_bm.is_open()){
+        while ((data_bm >> value) && (steps < N_STEPS)){
+          steps += 1;
+          y.push_back(value);
+        }
+      }
+      data_bm.close();
+      } else  {
+        cerr << "Error: unable to open the file." << endl;
+        exit(1);
+      }
 
 }
 
@@ -290,26 +311,66 @@ double bootstrap_corr(vector<double>& x, int num_fake_samples, int max_lenght){
     return sigma;
 }
 
+double blocking(int blocking_iteration, vector<double>& x){
+    int steps = x.size(), k_steps = steps;
+    double x_ave = 0., qsigma;
+    vector<double> x_k;
+
+    // compute average 
+    for(int i = 0; i < steps; i++) x_ave += x[i];
+    x_ave = x_ave / steps;
+
+    // compute variance 
+    for(int j = 0; j < steps; j++) qsigma += pow(x[j] - x_ave, 2);
+    qsigma = qsigma/(pow(steps, 2) - steps);
+
+    // start blocking algorithm
+    for(int n = 0; n < steps; n++) x_k[n] = x[n];
+
+    for(int k = 1; k <= blocking_iteration; k++){
+        k_steps = k_steps / 2;
+        x_ave = 0;
+        qsigma = 0;
+        for(int j = 0; j < k_steps; j++){
+            x_k[j] = (x_k[2*j] + x_k[2*j + 1]) / 2; 
+            x_ave += x_k[j];
+        }
+        x_ave = x_ave / k_steps;
+
+        for(int j = 0; j < k_steps; j++) qsigma += pow(x_k[j] - x_ave, 2);
+        qsigma = qsigma/(pow(k_steps, 2) - k_steps);
+
+
+        cout << "logging: k steps " << k << " -> ";
+        cout << fake_ave << " ± " << sqrt(qsigma) << endl; 
+    }
+
+  return sqrt(qsigma);
+}
+
 //---- Main --------------------------------------------------------------------
 
 int main() {
     double x_ave, sigma;
-    vector<double> data;
+    //vector<double> data;
+    vector<double> bm_data;
 
-    // box_muller();
+    box_muller();
+    load_box_muller(bm_data);
+
     // generate_MC_data();
 
-    x_ave = load_and_average(DIM_THERM, DIM_SUBSAMP, data);
-    cout << "The average of the sample is " << x_ave << endl;
+    //x_ave = load_and_average(DIM_THERM, DIM_SUBSAMP, data);
+    //cout << "The average of the sample is " << x_ave << endl;
 
     // sigma = autocorrelation(data, x_ave);
     // cout << "The result is " << x_ave << " +- " << sigma << endl;
 
-    sigma = bootstrap(data, NUM_FAKESAMPLES);
+    sigma = bootstrap(bm_data, NUM_FAKESAMPLES);
     cout << "Bootstrap gives: " << sigma << endl;
 
-    sigma = bootstrap_corr(data, NUM_FAKESAMPLES, CORREL_LENGHT);
-    cout << "Bootstrap corr gives: " << sigma << endl;
+    //sigma = bootstrap_corr(data, NUM_FAKESAMPLES, CORREL_LENGHT);
+    //cout << "Bootstrap corr gives: " << sigma << endl;
 
     return 0;
 }
