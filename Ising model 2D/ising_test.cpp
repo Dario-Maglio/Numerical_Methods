@@ -8,7 +8,7 @@
 #include <iostream>
 
 /*
-* import the the PRNG and the class lattice
+* import the class lattice
 */
 #include "ising_lattice.h"
 
@@ -18,36 +18,40 @@
 * I_FLAG = initial configuration flag; 0 for cold initialization, 1 for hot
 *   (random) initialization, 2 for loading the previous configuration from file.
 */
-#define SIDE 5
+#define SIDE 10
 #define G_FLAG 2
 #define I_FLAG 1
+
+/*
+* BETA = reciprocal of the temperature per k_B.
+* EXTFIELD = intensity of the external magnetic field.
+*/
+#define BETA 0.0002
+#define EXTFIELD 0.
+
+#define SUBSAMP 10
 
 using namespace std;
 
 //----Contents------------------------------------------------------------------
 
 int main(){
-    // Note that we don't need to define random_number because we've imported it
-    //random_number = prng(generator);
-    //cout << random_number << endl << endl;
-
+    double ener, magn;
     lattice ising(SIDE, G_FLAG, I_FLAG);
 
+    ener = ising.energy(EXTFIELD);
+    cout << "The energy is " << ener << endl;
+    magn = ising.magnetization();
+    cout << "The magnetization is " << magn << endl;
+    ising.show_configuration();
+
+    for(int i = 0; i < SUBSAMP; i++) ising.update(BETA, EXTFIELD);
+
+    ener = ising.energy(EXTFIELD);
+    cout << "The energy is " << ener << endl;
+    magn = ising.magnetization();
+    cout << "The magnetization is " << magn << endl;
     ising.show_configuration();
 
     ising.save_configuration();
-
-    cout << ising.sum_lattice_elements() << endl << endl;
-
-    ising.sum_nearest_neighbors_site();
-
-    ising.show_configuration();
-
-    cout << ising.sum_lattice_elements() << endl;
-
-    //ising.show_nearest_neighbors();
-
-    lattice ising2(SIDE, G_FLAG, 2);
-
-    ising2.show_configuration();
 }

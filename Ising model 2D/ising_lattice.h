@@ -1,6 +1,6 @@
 /*******************************************************************************
 *
-* Lattice class definition and PRNG
+* Lattice class definition
 *
 *******************************************************************************/
 
@@ -19,11 +19,13 @@
 
 using namespace std;
 
-//----Contents------------------------------------------------------------------
+// constants
+constexpr double pi = 3.14159265358979323846;
 
-float random_number;
-mt19937 generator(SEED);
-uniform_real_distribution<double> prng(0.0, 1.0);
+// define the PRNG
+mt19937_64 generator(SEED);
+
+//----Contents------------------------------------------------------------------
 
 class lattice {
 private:
@@ -40,6 +42,7 @@ public:
     {/************************** Class constructor ****************************/
 
         // Defining topology and nearest neighbors list
+        double random_number;
         vector<int> nearest_list;
 
         if (geometry_flag == 1) {
@@ -125,9 +128,9 @@ public:
             /* Initialising hot lattice */
 
             for (int i = 0; i < tot_lenght_; i++){
-                random_number = prng(generator);
+                random_number = rand_double();
                 if (random_number < 0.5){
-                    lattice_.push_back(0);
+                    lattice_.push_back(-1);
                 } else {
                     lattice_.push_back(1);
                 }
@@ -163,19 +166,61 @@ public:
 
     }/************************* Class methods *********************************/
 
+    /* Generate a random index for the lattice */
+    int rand_int(){
+        uniform_int_distribution<long int> randomint(0, tot_lenght_ - 1);
+        return randomint(generator);
+    }
+
+    /* Generate a random double */
+    double rand_double(){
+        uniform_real_distribution<double> prng(0.0, 1.0);
+        return prng(generator);
+    }
+
+    /* Compute the energy of the present configuration */
+    double energy(double extfield){
+        double sum, ener = 0.;
+
+        for(int i = 0; i < tot_lenght_; i++) {
+           sum = 0.;
+           for(auto nn : nearest_neighbors_[i]) sum += lattice_[nn];
+
+           ener += -0.5 * lattice_[i] * sum - extfield * lattice_[i];
+        }
+        ener = ener / tot_lenght_;
+
+        return ener;
+    }
+
+    /* Compute the magnetization of the present configuration */
+    double magnetization(){
+        double sum = 0;
+        for(int i = 0; i < tot_lenght_; i++) {
+           sum += lattice_[i];
+        }
+        sum = sum / tot_lenght_;
+        return sum;
+    }
+
     /* Print the lattice configuration */
     void show_configuration(){
+        int value;
         cout << "Lattice configuration: " << endl;
 
         if (geometry_flag == 1){
             for (int i = 0; i < tot_lenght_; i++){
-                cout << lattice_[i] << " ";
+                value = lattice_[i];
+                if (value == -1) value = 0;
+                cout << value << " ";
             }
             cout << endl << endl;
 
         } else if (geometry_flag == 2){
             for (int i = 0; i < tot_lenght_; i++){
-                cout << lattice_[i] << " ";
+                value = lattice_[i];
+                if (value == -1) value = 0;
+                cout << value << " ";
                 if ((i + 1) % side_lenght == 0){
                     cout << endl;
                 }
@@ -213,33 +258,27 @@ public:
         }
     }
 
+    /* Update the state of the lattice with a MC step */
+    void update(double beta, double extfield){
+        int ind;
+        double random_number, force = 0.;
 
-    /* Sum all lattice elements */
-    int sum_lattice_elements(){
-       int sum = 0;
-       for(int i = 0; i < tot_lenght_; i++ ) {
-           sum += lattice_[i];
-       }
+        // Metropolis-Hastings algorithm per Ising
+        for(int it = 0; it < tot_lenght_; it++){
+           ind = rand_int();
+           random_number = rand_double();
 
-       return sum;
-    }
+           // MC step for the site with index ind
+           for(auto nn : nearest_neighbors_[ind]) force += lattice_[nn];
 
-    /* Sum nearest neighbors of every site */
-    void sum_nearest_neighbors_site(){
-        vector<int> lattice_2;
-        lattice_2.reserve(tot_lenght_);
+           force = beta * (force + extfield);
 
-        for(int i = 0; i < tot_lenght_; i++){
-            int size = nearest_neighbors_[i].size();
-            lattice_2.push_back(0);
-            for(int j = 0; j < size; j++){
-                lattice_2[i] += lattice_[nearest_neighbors_[i][j]];
-            }
+           force = exp(-2.0 * force * lattice_[ind]);
+
+           // accept or reject step
+           if (random_number < force) lattice_[ind] = -lattice_[ind];
         }
-
-        lattice_ = lattice_2;
-        lattice_2.clear();
-     }
+    }
 
 };/************************* End class ****************************************/
 
