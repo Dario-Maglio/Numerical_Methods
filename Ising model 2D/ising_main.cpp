@@ -7,10 +7,9 @@
 //----Preprocessor directives---------------------------------------------------
 #include <iostream>
 #include <fstream>
+#include <string>
 
-/*
-* Import the class lattice
-*/
+/* Import the Class lattice */
 #include "ising_lattice.h"
 
 /*
@@ -20,7 +19,7 @@
 * I_FLAG = initial configuration flag; 0 for cold initialization, 1 for hot
 *   (random) initialization, 2 for loading the previous configuration from file.
 */
-#define SIDE 10
+#define SIDE 20
 #define G_FLAG 2
 #define I_FLAG 1
 
@@ -29,7 +28,8 @@
 * BETA = reciprocal of the product of the temperature and k_B.
 * EXTFIELD = adimensional intensity of the external magnetic field.
 */
-#define BETA 0.02
+#define INITIAL_BETA 0.345
+#define FINAL_BETA 0.555
 #define EXTFIELD 0.
 
 /*
@@ -37,42 +37,51 @@
 * I_DECORREL = updates of the system between different measurements.
 * MEASURES = desired number of measures.
 */
-#define I_DECORREL 1000
-#define MEASURES 1000
+#define I_DECORREL 10
+#define MEASURES 10000
 
 using namespace std;
 
 //----Contents------------------------------------------------------------------
 
 int main(){
+    float beta;
     double ener, magn;
+    string file_name;
     lattice ising(SIDE, G_FLAG, I_FLAG);
 
-    ofstream file;
-    file.open("lattice_measures.dat");
+    for(float beta = INITIAL_BETA; beta <= FINAL_BETA; beta += 0.01){
+        cout << "Running with beta = " << beta << endl;
 
-    ener = ising.energy(EXTFIELD);
-    cout << "The energy is " << ener << endl;
-    magn = ising.magnetization();
-    cout << "The magnetization is " << magn << endl;
-    ising.show_configuration();
-
-    for(int n = 0; n < MEASURES; n++){
-        for(int i = 0; i < I_DECORREL; i++) ising.update(BETA, EXTFIELD);
+        // Adapting the lattice to new beta
+        for(int i = 0; i < I_DECORREL; i++) ising.update(beta, EXTFIELD);
 
         ener = ising.energy(EXTFIELD);
+        cout << "-> starting energy = " << ener << endl;
         magn = ising.magnetization();
+        cout << "-> starting magnet = " << magn << endl;
+        ising.show_configuration();
 
-        file << ener << " " << magn << endl;
+        // Create the file
+        ofstream file;
+        file_name = "Side_" + to_string(SIDE) + "/side_" + to_string(SIDE) +
+                    "_beta_" + to_string(beta) + ".dat";
+        cout << endl << "Creating file: " << file_name << endl;
+        file.open(file_name);
+
+        // Update ising and take measures
+        for(int n = 0; n < MEASURES; n++){
+            for(int i = 0; i < I_DECORREL; i++) ising.update(beta, EXTFIELD);
+
+            ener = ising.energy(EXTFIELD);
+            magn = ising.magnetization();
+
+            file << ener << " " << magn << endl;
+        }
+
+        file.close();
+        cout << "The work is done." << endl << endl;
     }
-
-    file.close();
-
-    ener = ising.energy(EXTFIELD);
-    cout << "The energy is " << ener << endl;
-    magn = ising.magnetization();
-    cout << "The magnetization is " << magn << endl;
-    ising.show_configuration();
 
     ising.save_configuration();
 }

@@ -261,10 +261,11 @@ public:
     /* Update the state of the lattice with a MC step */
     void update(double beta, double extfield){
         int ind;
-        double random_number, force = 0.;
+        double random_number, force;
 
         // Metropolis-Hastings algorithm per Ising
         for(int it = 0; it < tot_lenght_; it++){
+           force = 0.;
            ind = rand_int();
            random_number = rand_double();
 
