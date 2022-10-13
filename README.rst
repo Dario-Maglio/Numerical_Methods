@@ -1,10 +1,6 @@
 Numerical methods for physics
 =============================
 
-.. image:: https://app.travis-ci.com/Dario-Maglio/Numerical_methods.svg?branch=main
-    :target: https://app.travis-ci.com/Dario-Maglio/Numerical_methods
-
-
 
 Fortran library, tests and Python interface. Elements from the UniSa and UniPi courses.
 
