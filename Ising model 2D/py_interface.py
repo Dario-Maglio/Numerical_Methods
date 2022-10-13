@@ -1,5 +1,4 @@
 import os
-import re
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -9,27 +8,31 @@ import matplotlib.pyplot as plt
 #-------------------------------------------------------------------------------
 
 def plot_magnetization():
-    plt.figure("fig_magnetization")
+    plt.figure("magnetization")
     plt.title("Average magnetization as a function of beta")
     plt.ylabel(r'$< M >$')
     plt.xlabel(r'$\beta$')
 
-    sides = np.arange(20, 70, 10, dtype='int')
+    sides = np.arange(20, 61, 10, dtype='int')
+    betas = np.arange(0.3600, 0.5101, 0.0025, dtype='float')
 
     for side in sides:
-        x = []
-        y = []
-        directory = f"Side_{side}"
-        print("logging: loading folder " + directory)
-        for filename in os.listdir(directory):
-            file = os.path.join(directory, filename)
-            if os.path.isfile(file):
-                data = np.loadtxt(file, unpack='True')
-                beta = float(re.findall("\d+\.\d+", filename)[0])
-                x.append(beta)
-                y.append(abs(np.mean(data[1,:])))
+        ene = []
+        mag = []
 
-        plt.scatter(x, y, s=10, label=f'side = {side}')
+        directory = f"Side_{side}"
+        print("logging: loading directory " + directory)
+
+        for beta in betas:
+            filename = "side_{0}_beta_{1:.6f}.dat".format(side, beta)
+            file = os.path.join(directory, filename)
+            print("logging: loading file -> " + file)
+            if os.path.isfile(file):
+                x, y = np.loadtxt(file, unpack='True')
+                ene.append(abs(np.mean(x)))
+                mag.append(abs(np.mean(y)))
+
+        plt.plot(betas, mag, label=f'side = {side}')
 
     plt.legend(loc='lower right')
     plt.show()
