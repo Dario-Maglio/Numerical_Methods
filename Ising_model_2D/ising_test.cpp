@@ -23,7 +23,7 @@
 *          1 for hot (random) initialization.
 *          2 for loading the previous configuration.
 */
-#define SIDE 70
+#define SIDE 60
 #define G_FLAG 2
 #define I_FLAG 1
 
@@ -35,7 +35,7 @@
 */
 #define BETA 0.440
 #define EXTFIELD 0.
-#define LOOPS 5000
+#define LOOPS 50000
 
 using namespace std;
 

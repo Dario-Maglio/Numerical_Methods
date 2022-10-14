@@ -29,8 +29,8 @@ def plot_magnetization():
             print("logging: loading file -> " + file)
             if os.path.isfile(file):
                 x, y = np.loadtxt(file, unpack='True')
-                ene.append(abs(np.mean(x)))
-                mag.append(abs(np.mean(y)))
+                ene.append(np.mean(x))
+                mag.append(np.mean(abs(y)))
 
         plt.plot(betas, mag, label=f'side = {side}')
 
