@@ -42,7 +42,7 @@
 #define BETA_SEP 0.0025
 #define EXTFIELD 0.
 #define I_DECORREL 5
-#define MEASURES 10000
+#define MEASURES 20000
 
 using namespace std;
 
