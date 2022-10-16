@@ -1,11 +1,11 @@
-Tensor network
-==============
+Tensor networks
+===============
 
 Lessons by Jorge.
 
 Authors
 -------
 
--> Dott. Jorge
+-> Dott. Jorge Yago Malo
 
 Physics department of UniPi

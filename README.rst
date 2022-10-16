@@ -12,15 +12,25 @@ Several notions about the computing methods we use in this repository can be fou
 
 Here you can find notes and codes about:
 
-- basics of Fortran programming language and a complete library of numerical methods.
-- methods for minimization and integration.
-- methods for solving ordinary differential equations (ODE).
-- methods for diagonalizing NxN matrices.
-- notions on Pseudo Random Number Generators and Monte Carlo algorithms.
-- methods for finding the Ground State of Quantum Systems. 
-- methods for solving partial differential equations (PDE).
 - application projects.
+
+- basics of Fortran programming language and numerical methods.
+
+- methods for minimization and integration.
+
+- methods for solving Ordinary and Stochastic Differential Equations (ODE & SDE).
+
+- methods for solving Partial Differential Equations (PDE).
+
+- methods for diagonalizing NxN matrices.
+
+- notions on Pseudo Random Number Generators and Monte Carlo algorithms.
+
+- methods for Path Integral and Quantum Systems simulations. 
+
 - some notes on Tensor Networks.
+
+
 
 Materials come from different sources, but most are from the "Metodi Numerici" course at the University of Pisa and the "Fisica Computazionale" course at the University of Salerno. All sources are cited in the documentation and in the README file of each directory.
 
