@@ -15,15 +15,18 @@
 #include <random>
 #include <cmath>
 
+// Define the PRNG
 #define SEED 42
+random_device device;
+mt19937 generator(device());
+//mt19937 generator(SEED);
 
-using namespace std;
 
-// constants
+// Define precise constants
 constexpr double pi = 3.14159265358979323846;
 
-// define the PRNG
-mt19937_64 generator(SEED);
+// Define the namespace
+using namespace std;
 
 //----Contents------------------------------------------------------------------
 

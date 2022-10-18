@@ -12,29 +12,37 @@
 #include <string>
 #include <random>
 
-#define SEED 42
-
 /*
 * CONFIGURATION PARAMETERS
 * SIDE_SEP = separation between the sides of different simulations.
 * BETA_SEP = separation between the betas of different simulations.
 */
 #define SIDE_MIN 20
-#define SIDE_MAX 20
+#define SIDE_MAX 60
 #define SIDE_SEP 10
 #define BETA_INI 0.3600
 #define BETA_FIN 0.5100
 #define BETA_SEP 0.0025
 
-#define BLOCKS_LENGHT 6
-#define MIN_CORR_LENGHT 200
+/*
+* ALGORITHMS PARAMETERS
+* BLOCKS_LENGHT = number of blocks reductions in the blocking algorithm
+* CORR_LENGHT = lenght of the correlated blocks in the bootstrap algorithm
+* NUM_FAKE_SAMP = number of fake samples of the bootstrap algorithm
+*/
+#define BLOCKS_LENGHT 7
+#define MIN_CORR_LENGHT 25
 #define MAX_CORR_LENGHT 200
 #define NUM_FAKE_SAMP 300
 
-using namespace std;
+// Define the PRNG
+#define SEED 42
+random_device device;
+mt19937 generator(device());
+//mt19937 generator(SEED);
 
-// define the PRNG
-mt19937_64 generator(SEED);
+// Define the namespace
+using namespace std;
 
 //----Contents------------------------------------------------------------------
 
@@ -82,7 +90,7 @@ double blocking(vector<double>& x, int blocking_iteration){
 
 /* Bootstrap with autocorrelation */
 double bootstrap_corr(vector<double>& x, int num_fake_samples, int max_lenght){
-    int steps = x.size(), draws, rand_index, k;
+    int steps = x.size(), lenght, draws, rand_index, k;
     double estimator, est_ave, est_var, samp_ave;
     vector<double> fake_sample, measures;
 
@@ -90,8 +98,9 @@ double bootstrap_corr(vector<double>& x, int num_fake_samples, int max_lenght){
     measures.reserve(num_fake_samples);
     uniform_int_distribution<long int> randomint(0, steps);
 
-    // Iterate over different lenght of the correlated blocks
-    for (int lenght = MIN_CORR_LENGHT; lenght <= max_lenght; lenght *= 2){
+    // Iterate over different lenght of the correlated
+    lenght = MIN_CORR_LENGHT;
+    while(lenght <= max_lenght){
 
         est_ave = 0.;
         draws = 1 + ((steps - 1) / lenght);
@@ -100,12 +109,12 @@ double bootstrap_corr(vector<double>& x, int num_fake_samples, int max_lenght){
         for (int i = 0; i < num_fake_samples; i++){
 
             samp_ave = 0.;
-            // Generate the i-fake_sample
+            // generate the i-fake_sample
             for (int j = 0; j < draws; j++){
-                // Extract the j-random_int
+                // extract the j-random_int
                 rand_index = randomint(generator);
 
-                // Push the j-block
+                // push the j-block
                 k = 0;
                 while (k < lenght && fake_sample.size() < steps){
                     if (rand_index + k == steps) rand_index -= steps;
@@ -118,8 +127,8 @@ double bootstrap_corr(vector<double>& x, int num_fake_samples, int max_lenght){
 
             // compute the variance, which here is our estimator
             estimator = 0.;
-            for(int i = 0; i < steps; i++) estimator += pow(fake_sample[i] - samp_ave, 2);
-            estimator = estimator / (steps - 1);    // per volume give this?????
+            for(auto val: fake_sample) estimator += pow(val - samp_ave, 2);
+            estimator = estimator / (steps - 1);     // remember per volume
 
             fake_sample.clear();
             est_ave += estimator;
@@ -127,16 +136,16 @@ double bootstrap_corr(vector<double>& x, int num_fake_samples, int max_lenght){
         }
         est_ave = est_ave / num_fake_samples;
 
-        // Compute the variance of k fake samples
+        // compute the variance over num_fake_samples fake samples
         est_var = 0.;
-        for (auto val : measures) est_var += pow(val, 2);
-        est_var = est_var / num_fake_samples;
-        est_var = est_var - pow(est_ave, 2);      // correct way?????
+        for (auto val : measures) est_var += pow(val - est_ave, 2);
+        est_var = est_var / (num_fake_samples - 1);  // per N divided by N - 1
 
         measures.clear();
 
         cout << "logging: correl lenght " << lenght << " -> ";
         cout << est_ave << " ± " << sqrt(est_var) << endl;
+        lenght = (lenght * 4) / 3;
     }
 
     return sqrt(est_var);
@@ -145,7 +154,6 @@ double bootstrap_corr(vector<double>& x, int num_fake_samples, int max_lenght){
 /* Operations over each file */
 void file_operations(int side, float beta, vector<double>& measures){
     int lenght = 0;
-    double ene, mag;
     double ene_ave = 0., mag_ave = 0., ene_var = 0., mag_var = 0., cumul = 0.;
     string file_name;
     vector<double> energies, magnetis;
@@ -155,8 +163,8 @@ void file_operations(int side, float beta, vector<double>& measures){
     ifstream file(file_name);
 
     if (file.is_open()) {
-
         // Load data and compute averages
+        double ene, mag;
         while (file >> ene >> mag){
             lenght++;
             mag = abs(mag);
@@ -180,18 +188,19 @@ void file_operations(int side, float beta, vector<double>& measures){
         cout << side << " " << beta << " --- magnet error: " << endl;
         measures[3] = blocking(magnetis, BLOCKS_LENGHT);
 
-        // compute the estimators and Binder cumulant
-        for(auto val: energies) ene_var += pow(val, 2);
-        ene_var = (ene_var / lenght) - pow(ene_ave, 2);
-        measures[4] = lenght * ene_var;        // per volume give this?????
+        // compute the estimators
+        for(auto val: energies) ene_var += pow(val - ene_ave, 2);
+        measures[4] = ene_var / (lenght - 1);    // remember per volume
 
+        for(auto val: magnetis) mag_var += pow(val - mag_ave, 2);
+        measures[6] = mag_var / (lenght - 1);    // remember per volume
+
+        // compute the Binder cumulant
+        mag_var = 0.;
         for(auto val: magnetis) mag_var += pow(val, 2);
         for(auto val: magnetis) cumul += pow(val, 4);
         cumul = (cumul * lenght) / pow(mag_var, 2);
         measures[8] = cumul;
-
-        mag_var = mag_var / lenght - pow(mag_ave, 2);
-        measures[6] = lenght * mag_var;           // per volume give this?????
 
         // compute the error with bootstrap algorithm
         cout << side << " " << beta << " --- heat error: " << endl;
@@ -225,7 +234,6 @@ int main(){
             for(int i = 0; i < 9; i++) file << measures[i] << " ";
             file << endl;
         }
-
         file.close();
     }
 
