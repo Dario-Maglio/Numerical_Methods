@@ -35,14 +35,14 @@
 #define MAX_CORR_LENGHT 200
 #define NUM_FAKE_SAMP 300
 
-// Define the PRNG
-#define SEED 42
-random_device device;
-mt19937 generator(device());
-//mt19937 generator(SEED);
-
 // Define the namespace
 using namespace std;
+
+// Define the PRNG
+#define SEED 42
+mt19937 generator(SEED);
+//random_device device;
+//mt19937 generator(device());
 
 //----Contents------------------------------------------------------------------
 
@@ -213,8 +213,7 @@ void file_operations(int side, float beta, vector<double>& measures){
     }
 }
 
-/* Main for the data analysis */
-int main(){
+void complete_analysis(){
     ofstream file;
     string file_name;
     vector<double> measures;
@@ -236,6 +235,39 @@ int main(){
         }
         file.close();
     }
+}
+
+void partial_analysis(){
+    int side_in;
+    ofstream file;
+    string file_name;
+    vector<double> measures;
+
+    measures.reserve(9);
+    for(int i = 0; i < 9; i++) measures.push_back(0.);
+    
+    cout << "Insert side lenght: ";
+    cin >>  side_in; 
+
+    file_name = "Side_" + to_string(side_in) + "/averages_and_variance.dat";
+    cout << endl << "Creating file: " << file_name << endl;
+    file.open(file_name);
+
+    for(float beta = BETA_INI; beta <= BETA_FIN; beta += BETA_SEP){
+        file_operations(side_in, beta, measures);
+        file << beta << " ";
+        for(int i = 0; i < 9; i++) file << measures[i] << " ";
+        file << endl;
+    }
+    file.close();
+}
+
+/* Main for the data analysis */
+int main(){
+    
+    // complete_analysis();
+
+    partial_analysis();
 
     cout << "The work is done." << endl << endl;
 }
