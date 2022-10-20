@@ -245,9 +245,9 @@ void partial_analysis(){
 
     measures.reserve(9);
     for(int i = 0; i < 9; i++) measures.push_back(0.);
-    
+
     cout << "Insert side lenght: ";
-    cin >>  side_in; 
+    cin >>  side_in;
 
     file_name = "Side_" + to_string(side_in) + "/averages_and_variance.dat";
     cout << endl << "Creating file: " << file_name << endl;
@@ -264,7 +264,7 @@ void partial_analysis(){
 
 /* Main for the data analysis */
 int main(){
-    
+
     // complete_analysis();
 
     partial_analysis();

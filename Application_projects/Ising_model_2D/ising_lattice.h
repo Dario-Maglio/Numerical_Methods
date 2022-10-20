@@ -15,18 +15,17 @@
 #include <random>
 #include <cmath>
 
+// Define the namespace
+using namespace std;
+
 // Define the PRNG
 #define SEED 42
 random_device device;
 mt19937 generator(device());
 //mt19937 generator(SEED);
 
-
 // Define precise constants
 constexpr double pi = 3.14159265358979323846;
-
-// Define the namespace
-using namespace std;
 
 //----Contents------------------------------------------------------------------
 
@@ -38,7 +37,7 @@ private:
 
 public:
     const int side_lenght, geometry_flag, initial_flag;
-    lattice(const int &SIDE = 5, const int &G_FLAG = 0, const int &I_FLAG = 0):
+    lattice(const int &SIDE, const int &G_FLAG, const int &I_FLAG):
         side_lenght(SIDE),
         geometry_flag(G_FLAG),
         initial_flag(I_FLAG)
@@ -143,7 +142,7 @@ public:
             /* Restore old lattice from file */
 
             cout << "Loading initial configuration..." << endl;
-            ifstream file("lattice_configuration.dat");
+            ifstream file("ising_state.dat");
             if (file.is_open()) {
                 int site;
                 while (file >> site){
@@ -235,7 +234,7 @@ public:
     /* Save the current configuration of the lattice */
     void save_configuration(){
         ofstream file;
-        file.open ("lattice_configuration.dat");
+        file.open ("ising_state.dat");
         for (int i = 0; i < tot_lenght_; i++){
             file << lattice_[i] << endl;
         }
@@ -286,5 +285,4 @@ public:
 
 };/************************* End class ****************************************/
 
-//------------------------------------------------------------------------------
 #endif
