@@ -36,27 +36,28 @@ sides, betas = np.reshape(args, (2, -1))
 
 #-----Contents------------------------------------------------------------------
 
-# Define an output queue if you need results
-output = mp.Queue()
+if __name__ == '__main__':
+    # Define an output queue if you need results
+    output = mp.Queue()
 
-# Setup a list of processes that we want to run
-processes = [
-    mp.Process(
-        target=ROOT.run_simulation,
-        args=(int(side), beta)
-    ) for side, beta in zip(sides, betas)
-]
+    # Setup a list of processes that we want to run
+    processes = [
+        mp.Process(
+            target=ROOT.run_simulation,
+            args=(int(side), beta)
+        ) for side, beta in zip(sides, betas)
+    ]
 
-# Clocking processes
-tic = time.perf_counter()
-# Run processes
-for p in processes:
-    p.start()
-# Exit the completed processes
-for p in processes:
-    p.join()
-toc = time.perf_counter()
+    # Clocking processes
+    tic = time.perf_counter()
+    # Run processes
+    for p in processes:
+        p.start()
+    # Exit the completed processes
+    for p in processes:
+        p.join()
+    toc = time.perf_counter()
 
-print(f"Executed in {toc - tic:0.4f} seconds")
+    print(f"Executed in {toc - tic:0.4f} seconds")
 
-print("The work is done.")
+    print("The work is done.")

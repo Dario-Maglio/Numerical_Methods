@@ -11,6 +11,7 @@
 #include <iostream>
 #include <fstream>
 
+#include <string>
 #include <vector>
 #include <random>
 #include <cmath>
@@ -39,17 +40,15 @@ public:
     const int side_lenght, geometry_flag, initial_flag;
     lattice(const int &SIDE, const int &G_FLAG, const int &I_FLAG):
         side_lenght(SIDE),
-        geometry_flag(G_FLAG),
-        initial_flag(I_FLAG)
+        geometry_flag(G_FLAG),         // 1 -> 1D | 2 -> 2D | else -> Error
+        initial_flag(I_FLAG)           // 0 -> cold | else-> hot
     {/************************** Class constructor ****************************/
-
-        // Defining topology and nearest neighbors list
         double random_number;
         vector<int> nearest_list;
 
+        //--- Defining topology and nearest neighbors ---
         if (geometry_flag == 1) {
             /* 1D lattice with PBC */
-
             tot_lenght_ = side_lenght;
             lattice_.reserve(tot_lenght_);
             nearest_neighbors_.reserve(tot_lenght_);
@@ -76,7 +75,6 @@ public:
 
         } else if (geometry_flag == 2) {
             /* 2D square lattice with PBC */
-
             tot_lenght_ = side_lenght * side_lenght;
             lattice_.reserve(tot_lenght_);
             nearest_neighbors_.reserve(tot_lenght_);
@@ -113,22 +111,17 @@ public:
 
         } else {
             /* Not implemented */
-
             cerr << "Error: geometry not implemented." << endl;
             exit(1);
         }
 
-        // Initialising the lattice configuration
+        //--- Initialising the lattice configuration ---
         if (initial_flag == 0) {
             /* Initialising cold lattice */
+            for (int i = 0; i < tot_lenght_; i++) lattice_.push_back(1);
 
-            for (int i = 0; i < tot_lenght_; i++){
-                lattice_.push_back(1);
-            }
-
-        } else if (initial_flag == 1) {
+        } else {
             /* Initialising hot lattice */
-
             for (int i = 0; i < tot_lenght_; i++){
                 random_number = rand_double();
                 if (random_number < 0.5){
@@ -137,33 +130,6 @@ public:
                     lattice_.push_back(1);
                 }
             }
-
-        } else if (initial_flag == 2) {
-            /* Restore old lattice from file */
-
-            cout << "Loading initial configuration..." << endl;
-            ifstream file("ising_state.dat");
-            if (file.is_open()) {
-                int site;
-                while (file >> site){
-                    lattice_.push_back(site);
-                }
-                file.close();
-            } else {
-                cerr << "Error: unable to open the file." << endl;
-                exit(1);
-            }
-
-            if (lattice_.size() != tot_lenght_){
-                cerr << "Error: different number of sites." << endl;
-                exit(1);
-            }
-
-        } else {
-            /* Not implemented */
-
-            cerr << "Error: initial configuration not implemented." << endl;
-            exit(1);
         }
 
     }/************************* Class methods *********************************/
@@ -231,14 +197,34 @@ public:
         }
     }
 
-    /* Save the current configuration of the lattice */
-    void save_configuration(){
+    /* Save the current configuration */
+    void save_configuration(string file_state = "ising_state.dat"){
         ofstream file;
-        file.open ("ising_state.dat");
+        file.open(file_state);
         for (int i = 0; i < tot_lenght_; i++){
             file << lattice_[i] << endl;
         }
         file.close();
+    }
+
+    /* Load configuration from path */
+    void load_configuration(string file_state = "ising_state.dat"){
+        int i = 0;
+        ifstream file(file_state);
+
+        cout << "Loading initial configuration..." << endl;
+        if (file.is_open()) {
+            while((file >> lattice_[i]) && (i < tot_lenght_)) i++;
+            file.close();
+        } else {
+            cerr << "Error: unable to open the file." << endl;
+            exit(1);
+        }
+
+        if (i != tot_lenght_){
+            cerr << "Error: different number of sites." << endl;
+            exit(1);
+        }
     }
 
     /* Print the nearest neighbors of the site index */

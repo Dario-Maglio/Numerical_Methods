@@ -6,6 +6,7 @@
 
 //----Preprocessor directives---------------------------------------------------
 #include <iostream>
+#include <string>
 #include <chrono>
 
 /* Import the Class lattice */
@@ -25,7 +26,7 @@
 */
 #define SIDE 60
 #define G_FLAG 2
-#define I_FLAG 1
+#define I_FLAG 2
 
 /*
 * CONFIGURATION PARAMETERS OF THE SIMULATION
@@ -35,17 +36,28 @@
 */
 #define BETA 0.440
 #define EXTFIELD 0.
-#define LOOPS 50000
+#define I_DECORREL 5
+#define LOOPS 500
 
 using namespace std;
 
 //----Contents------------------------------------------------------------------
 
 int main(){
+    string file_path;
     double ener, magn;
     lattice ising(SIDE, G_FLAG, I_FLAG);
 
+    file_path = "ising_state.dat";
     cout << "Running with beta = " << BETA << endl;
+
+    if(I_FLAG == 2){
+        // Loading configuration
+        ising.load_configuration(file_path);
+    } else {
+        // Thermalization phase
+        for(int i = 0; i < (10 * I_DECORREL); i++) ising.update(BETA, EXTFIELD);
+    }
 
     ener = ising.energy(EXTFIELD);
     cout << "-> starting energy = " << ener << endl;
@@ -58,7 +70,8 @@ int main(){
     auto end = chrono::steady_clock::now();
 
     chrono::duration<double> elapsed_seconds = end - start;
-    cout << "Elapsed time: " << elapsed_seconds.count() << "s " << endl;
+    cout << "Elapsed time for " << LOOPS << " loops: "
+         << elapsed_seconds.count() << "s " << endl;
 
     ener = ising.energy(EXTFIELD);
     cout << "-> final energy = " << ener << endl;
@@ -66,5 +79,5 @@ int main(){
     cout << "-> final magnet = " << magn << endl << endl;
     ising.show_configuration();
 
-    ising.save_configuration();
+    ising.save_configuration(file_path);
 }

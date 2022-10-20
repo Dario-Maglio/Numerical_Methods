@@ -1,6 +1,6 @@
 /*******************************************************************************
 *
-* Main program for the Ising simulations
+* Main program for the parallel Ising simulations
 *
 *******************************************************************************/
 
@@ -22,7 +22,7 @@
 #define BETA_FIN 0.5100
 #define BETA_SEP 0.0025
 #define SIDE_MIN 20
-#define SIDE_MAX 20
+#define SIDE_MAX 60
 #define SIDE_SEP 10
 
 using namespace std;
@@ -36,9 +36,9 @@ int main(){
 
     auto start = chrono::steady_clock::now();
     for(int side = SIDE_MIN; side <= SIDE_MAX; side += SIDE_SEP){
-        for(float beta = BETA_INI; beta <= BETA_FIN; beta += BETA_SEP){
+      for(float beta = BETA_INI; beta <= BETA_FIN; beta += BETA_SEP){
         threadPool.emplace_back([side, beta]() {run_simulation(side, beta); });
-        }
+      }
     }
 
     for (auto& thr : threadPool) thr.join();
