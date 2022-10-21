@@ -33,7 +33,7 @@
 #define I_FLAG 2
 #define EXTFIELD 0.
 #define I_DECORREL 10
-#define MEASURES 1000
+#define MEASURES 10000
 
 using namespace std;
 
@@ -71,6 +71,7 @@ void run_simulation(int side, float beta){
     } else {
         file.open(directory + name_file_data);
     }
+    
     // Update ising and take measures
     for(int n = 0; n < MEASURES; n++){
         for(int i = 0; i < I_DECORREL; i++) ising.update(beta, EXTFIELD);
