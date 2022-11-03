@@ -14,21 +14,17 @@ Here you can find notes and codes about:
 
 - application projects.
 
-- basics of Fortran programming language and numerical methods.
+- basics of Fortran programming language and numerical methods (Basic methods).
 
-- methods for minimization and integration.
+- methods for roots, minimization and integration (Basic methods).
 
-- methods for solving Ordinary and Stochastic Differential Equations (ODE & SDE).
+- methods for diagonalizing NxN matrices (Applications).
 
-- methods for solving Partial Differential Equations (PDE).
+- methods for Ordinary, Stochastic and Partial Differential Equations.
 
-- methods for diagonalizing NxN matrices.
+- methods for Monte Carlo simulations and Pseudo Random Number Generators.
 
-- notions on Pseudo Random Number Generators and Monte Carlo algorithms.
-
-- methods for Path Integral and Quantum Systems simulations. 
-
-- some notes on Tensor Networks.
+- methods for Path Integral and Quantum Systems simulations.
 
 
 
