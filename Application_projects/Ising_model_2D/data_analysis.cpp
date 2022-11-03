@@ -14,9 +14,11 @@
 
 /*
 * CONFIGURATION PARAMETERS
+* DATA = number of desired estimators to save on a file
 * SIDE_SEP = separation between the sides of different simulations.
 * BETA_SEP = separation between the betas of different simulations.
 */
+#define DATA 9
 #define SIDE_MIN 20
 #define SIDE_MAX 60
 #define SIDE_SEP 10
@@ -32,8 +34,8 @@
 */
 #define BLOCKS_LENGHT 7
 #define MIN_CORR_LENGHT 25
-#define MAX_CORR_LENGHT 200
-#define NUM_FAKE_SAMP 300
+#define MAX_CORR_LENGHT 100
+#define NUM_FAKE_SAMP 100
 
 // Define the namespace
 using namespace std;
@@ -47,7 +49,7 @@ mt19937 generator(SEED);
 //----Contents------------------------------------------------------------------
 
 // Compute sigma with the blocking algorithm
-double blocking(vector<double>& x, int blocking_iteration){
+double blocking(vector<double>& x, int blocking_iteration, ofstream &file){
     int steps = x.size(), k_steps = steps;
     double x_ave = 0., var = 0.;
     vector<double> x_k;
@@ -81,15 +83,16 @@ double blocking(vector<double>& x, int blocking_iteration){
         var = var / (pow(k_steps, 2) - k_steps);
 
 
-        cout << "logging: k steps " << k << " -> ";
-        cout << x_ave << " ± " << sqrt(var) << endl;
+        file << "k steps " << k << " -> ";
+        file << x_ave << " ± " << sqrt(var) << endl;
     }
 
   return sqrt(var);
 }
 
 /* Bootstrap with autocorrelation */
-double bootstrap_corr(vector<double>& x, int num_fake_samples, int max_lenght){
+double bootstrap_corr(vector<double>& x, int num_fake_samples, int max_lenght,
+                      ofstream &file){
     int steps = x.size(), lenght, draws, rand_index, k;
     double estimator, est_ave, est_var, samp_ave;
     vector<double> fake_sample, measures;
@@ -143,8 +146,8 @@ double bootstrap_corr(vector<double>& x, int num_fake_samples, int max_lenght){
 
         measures.clear();
 
-        cout << "logging: correl lenght " << lenght << " -> ";
-        cout << est_ave << " ± " << sqrt(est_var) << endl;
+        file << "correl lenght " << lenght << " -> ";
+        file << est_ave << " ± " << sqrt(est_var) << endl;
         lenght = (lenght * 4) / 3;
     }
 
@@ -152,7 +155,8 @@ double bootstrap_corr(vector<double>& x, int num_fake_samples, int max_lenght){
 }
 
 /* Operations over each file */
-void file_operations(int side, float beta, vector<double>& measures){
+void file_operations(int side, float beta, vector<double>& measures,
+                     ofstream &file_analysis){
     int lenght = 0;
     double ene_ave = 0., mag_ave = 0., ene_var = 0., mag_var = 0., cumul = 0.;
     string file_name;
@@ -183,10 +187,11 @@ void file_operations(int side, float beta, vector<double>& measures){
 
         // compute the errors with blocking algorithm
         cout << endl << "side: " << side << " | beta: " << beta << endl;
-        cout << side << " " << beta << " --- energy error: " << endl;
-        measures[1] = blocking(energies, BLOCKS_LENGHT);
-        cout << side << " " << beta << " --- magnet error: " << endl;
-        measures[3] = blocking(magnetis, BLOCKS_LENGHT);
+        file_analysis << endl << "L: " << side << " | beta: " << beta << endl;
+        file_analysis << side << " " << beta << " --- energy error: " << endl;
+        measures[1] = blocking(energies, BLOCKS_LENGHT, file_analysis);
+        file_analysis << side << " " << beta << " --- magnet error: " << endl;
+        measures[3] = blocking(magnetis, BLOCKS_LENGHT, file_analysis);
 
         // compute the estimators
         for(auto val: energies) ene_var += pow(val - ene_ave, 2);
@@ -203,10 +208,12 @@ void file_operations(int side, float beta, vector<double>& measures){
         measures[8] = cumul;
 
         // compute the error with bootstrap algorithm
-        cout << side << " " << beta << " --- heat error: " << endl;
-        measures[5] = bootstrap_corr(energies, NUM_FAKE_SAMP, MAX_CORR_LENGHT);
-        cout << side << " " << beta << " --- chi error: " << endl;
-        measures[7] = bootstrap_corr(magnetis, NUM_FAKE_SAMP, MAX_CORR_LENGHT);
+        file_analysis << side << " " << beta << " --- heat error: " << endl;
+        measures[5] = bootstrap_corr(energies, NUM_FAKE_SAMP, MAX_CORR_LENGHT,
+                                     file_analysis);
+        file_analysis << side << " " << beta << " --- chi error: " << endl;
+        measures[7] = bootstrap_corr(magnetis, NUM_FAKE_SAMP, MAX_CORR_LENGHT,
+                                     file_analysis);
     } else {
         cerr << "Error: unable to open the file." << endl;
         exit(1);
@@ -214,52 +221,61 @@ void file_operations(int side, float beta, vector<double>& measures){
 }
 
 void complete_analysis(){
-    ofstream file;
+    ofstream file, file_analysis;
     string file_name;
     vector<double> measures;
 
-    measures.reserve(9);
-    for(int i = 0; i < 9; i++) measures.push_back(0.);
+    measures.reserve(DATA);
+    for(int i = 0; i < DATA; i++) measures.push_back(0.);
 
     for(int side = SIDE_MIN; side <= SIDE_MAX; side += SIDE_SEP){
+        file_name = "Data_analysis/side_" + to_string(side) + "_analysis.txt";
+        cout << endl << "Creating file: " << file_name << endl;
+        file_analysis.open(file_name);
 
-        file_name = "Side_" + to_string(side) + "/averages_and_variance.dat";
-        cout << endl << endl << "Creating file: " << file_name << endl;
+        file_name = "Data_analysis/side_" + to_string(side) + "_data.dat";
+        cout << endl << "Creating file: " << file_name << endl;
         file.open(file_name);
 
         for(float beta = BETA_INI; beta <= BETA_FIN; beta += BETA_SEP){
-            file_operations(side, beta, measures);
+            file_operations(side, beta, measures, file_analysis);
             file << beta << " ";
-            for(int i = 0; i < 9; i++) file << measures[i] << " ";
+            for(int i = 0; i < DATA; i++) file << measures[i] << " ";
             file << endl;
         }
         file.close();
+        file_analysis.close();
     }
 }
 
 void partial_analysis(){
     int side_in;
-    ofstream file;
+    ofstream file, file_analysis;
     string file_name;
     vector<double> measures;
 
-    measures.reserve(9);
-    for(int i = 0; i < 9; i++) measures.push_back(0.);
+    measures.reserve(DATA);
+    for(int i = 0; i < DATA; i++) measures.push_back(0.);
 
     cout << "Insert side lenght: ";
     cin >>  side_in;
 
-    file_name = "Side_" + to_string(side_in) + "/averages_and_variance.dat";
+    file_name = "Data_analysis/side_" + to_string(side_in) + "_analysis.txt";
+    cout << endl << "Creating file: " << file_name << endl;
+    file_analysis.open(file_name);
+
+    file_name = "Data_analysis/side_" + to_string(side_in) + "_data.dat";
     cout << endl << "Creating file: " << file_name << endl;
     file.open(file_name);
 
     for(float beta = BETA_INI; beta <= BETA_FIN; beta += BETA_SEP){
-        file_operations(side_in, beta, measures);
+        file_operations(side_in, beta, measures, file_analysis);
         file << beta << " ";
-        for(int i = 0; i < 9; i++) file << measures[i] << " ";
+        for(int i = 0; i < DATA; i++) file << measures[i] << " ";
         file << endl;
     }
     file.close();
+    file_analysis.close();
 }
 
 /* Main for the data analysis */
