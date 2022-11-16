@@ -33,7 +33,7 @@
 #define I_FLAG 2
 #define EXTFIELD 0.
 #define I_DECORREL 10
-#define MEASURES 60000
+#define MEASURES 18000
 
 using namespace std;
 

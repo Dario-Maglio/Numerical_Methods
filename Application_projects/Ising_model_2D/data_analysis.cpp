@@ -28,14 +28,14 @@
 
 /*
 * ALGORITHMS PARAMETERS
-* BLOCKS_LENGHT = number of blocks reductions in the blocking algorithm
+* BLOCKING = number of blocks reductions in the blocking algorithm
 * CORR_LENGHT = lenght of the correlated blocks in the bootstrap algorithm
 * NUM_FAKE_SAMP = number of fake samples of the bootstrap algorithm
 */
-#define BLOCKS_LENGHT 7
-#define MIN_CORR_LENGHT 25
-#define MAX_CORR_LENGHT 100
-#define NUM_FAKE_SAMP 100
+#define BLOCKING 7
+#define MIN_CORR_LENGHT 2
+#define MAX_CORR_LENGHT 300
+#define NUM_FAKE_SAMP 300
 
 // Define the namespace
 using namespace std;
@@ -148,7 +148,7 @@ double bootstrap_corr(vector<double>& x, int num_fake_samples, int max_lenght,
 
         file << "correl lenght " << lenght << " -> ";
         file << est_ave << " ± " << sqrt(est_var) << endl;
-        lenght = (lenght * 4) / 3;
+        lenght = lenght * 2;
     }
 
     return sqrt(est_var);
@@ -189,9 +189,9 @@ void file_operations(int side, float beta, vector<double>& measures,
         cout << endl << "side: " << side << " | beta: " << beta << endl;
         file_analysis << endl << "L: " << side << " | beta: " << beta << endl;
         file_analysis << side << " " << beta << " --- energy error: " << endl;
-        measures[1] = blocking(energies, BLOCKS_LENGHT, file_analysis);
+        measures[1] = blocking(energies, BLOCKING, file_analysis);
         file_analysis << side << " " << beta << " --- magnet error: " << endl;
-        measures[3] = blocking(magnetis, BLOCKS_LENGHT, file_analysis);
+        measures[3] = blocking(magnetis, BLOCKING, file_analysis);
 
         // compute the estimators
         for(auto val: energies) ene_var += pow(val - ene_ave, 2);
@@ -221,8 +221,8 @@ void file_operations(int side, float beta, vector<double>& measures,
 }
 
 void complete_analysis(){
-    ofstream file, file_analysis;
     string file_name;
+    ofstream file, file_analysis;
     vector<double> measures;
 
     measures.reserve(DATA);
@@ -250,8 +250,8 @@ void complete_analysis(){
 
 void partial_analysis(){
     int side_in;
-    ofstream file, file_analysis;
     string file_name;
+    ofstream file, file_analysis;
     vector<double> measures;
 
     measures.reserve(DATA);
