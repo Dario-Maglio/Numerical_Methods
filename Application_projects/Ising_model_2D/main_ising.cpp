@@ -8,11 +8,11 @@
 #include <iostream>
 #include <chrono>
 
-/* Import the simulation subroutine */
-#include "ising_simulation.h"
+// Import the subroutine run_simulation
+#include "ising_run_simulation.h"
 
 /*
-* CONFIGURATION PARAMETERS OF THE SIMULATION
+* PARAMETERS OF THE SIMULATION
 * BETA_SEP = separation between the betas of different simulations.
 * SIDE_SEP = separation between the sides of different simulations.
 */
@@ -30,7 +30,6 @@ using namespace std;
 
 /* Main program iterates over sides and betas */
 int main(){
-
     auto start = chrono::steady_clock::now();
     for(int side = SIDE_MIN; side <= SIDE_MAX; side += SIDE_SEP){
         for(float beta = BETA_INI; beta <= BETA_FIN; beta += BETA_SEP){

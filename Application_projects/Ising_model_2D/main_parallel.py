@@ -1,10 +1,8 @@
-"""
-/*******************************************************************************
+"""/****************************************************************************
 *
 * Main program for the parallel Ising simulations
 *
-*******************************************************************************/
-"""
+****************************************************************************/"""
 
 #-----Initial imports and definitions-------------------------------------------
 
@@ -14,8 +12,8 @@ import ROOT
 import numpy as np
 import multiprocessing as mp
 
-ROOT.gInterpreter.ProcessLine('#include "ising_lattice.h"')
-ROOT.gInterpreter.ProcessLine('#include "ising_simulation.h"')
+ROOT.gInterpreter.ProcessLine('#include "ising_lattice_class.h"')
+ROOT.gInterpreter.ProcessLine('#include "ising_run_simulation.h"')
 
 """
 * CONFIGURATION PARAMETERS OF THE LATTICE

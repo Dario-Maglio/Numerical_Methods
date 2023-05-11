@@ -10,8 +10,8 @@
 #include <thread>
 #include <chrono>
 
-/* Import the simulation subroutine */
-#include "ising_simulation.h"
+// Import the simulation subroutine
+#include "ising_run_simulation.h"
 
 /*
 * CONFIGURATION PARAMETERS OF THE SIMULATION
