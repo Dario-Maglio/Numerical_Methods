@@ -4,7 +4,8 @@
 *
 *******************************************************************************/
 
-//----Preprocessor directives---------------------------------------------------
+//--- Preprocessor directives --------------------------------------------------
+
 #ifndef ISING_LATTICE_CLASS_H
 #define ISING_LATTICE_CLASS_H
 
@@ -16,7 +17,6 @@
 #include <random>
 #include <cmath>
 
-// Define the namespace
 using namespace std;
 
 // Define the PRNG
@@ -28,10 +28,9 @@ mt19937 generator(device());
 // Define precise constants
 constexpr double pi = 3.14159265358979323846;
 
-//----Contents------------------------------------------------------------------
+//--- Contents -----------------------------------------------------------------
 
 class lattice {
-/************************** Class attributes **********************************/
 
 private:
     int tot_lenght_;
@@ -41,20 +40,32 @@ private:
 public:
     const int side_lenght, geometry_flag, initial_flag;
 
-/************************** Class constructor *********************************/
-
     lattice(const int &SIDE, const int &G_FLAG, const int &I_FLAG):
+       /* Class lattice constructor **********************************
+
+       Inputs:
+
+       SIDE = number of sites per side.
+
+       G_FLAG =  geometry_flag for the topology.
+                 1 for 1D lattice with PBC.
+                 2 for 2D square lattice with PBC.
+                 else gives "Error: not implemented yet".
+
+       I_FLAG = initial_flag for the initial condition.
+                0 for initialising cold lattice.
+                else initialise hot lattice.
+
+        *************************************************************/
         side_lenght(SIDE),
         geometry_flag(G_FLAG),
         initial_flag(I_FLAG)
         {// CONSTRUCTION BEGIN
+
         double random_number;
         vector<int> nearest_list;
 
-        //--- Defining topology and nearest neighbors ---
-        // geometry_flag == 1 -> 1D lattice with PBC
-        // geometry_flag == 2 -> 2D square lattice with PBC
-        // geometry_flag == else -> Error: not implemented yet
+        // Defining topology and nearest neighbors
         if (geometry_flag == 1) {
             tot_lenght_ = side_lenght;
             lattice_.reserve(tot_lenght_);
@@ -123,9 +134,7 @@ public:
 
 
 
-        //--- Initialising the lattice configuration ---
-        // initial_flag == 0 -> Initialising cold lattice
-        // initial_flag == else -> Initialising hot lattice
+        // Initialising the lattice configuration
         if (initial_flag == 0) {
             for (int i = 0; i < tot_lenght_; i++) lattice_.push_back(1);
         } else {
@@ -140,50 +149,47 @@ public:
         }
     }// CONSTRUCTION END
 
-/************************* Class methods **************************************/
-
-    /* Generate a random index for the lattice */
     int rand_int(){
+        /* Generate a random index for the lattice */
+
         uniform_int_distribution<long int> randomint(0, tot_lenght_ - 1);
         return randomint(generator);
     }
 
-    /* Generate a random double */
     double rand_double(){
+        /* Generate a random double */
+
         uniform_real_distribution<double> prng(0.0, 1.0);
         return prng(generator);
     }
 
-    /* Compute the energy of the present configuration */
     double energy(double extfield){
-        double sum, ener = 0.;
+        /* Compute the energy of the present configuration */
 
+        double sum, ener = 0.;
         for(int i = 0; i < tot_lenght_; i++) {
            sum = 0.;
            for(auto nn : nearest_neighbors_[i]) sum += lattice_[nn];
-
            ener += -0.5 * lattice_[i] * sum - extfield * lattice_[i];
         }
         ener = ener / tot_lenght_;
-
         return ener;
     }
 
-    /* Compute the magnetization of the present configuration */
     double magnetization(){
+        /* Compute the magnetization of the present configuration */
+
         double sum = 0;
-        for(int i = 0; i < tot_lenght_; i++) {
-           sum += lattice_[i];
-        }
+        for(int i = 0; i < tot_lenght_; i++) sum += lattice_[i];
         sum = sum / tot_lenght_;
         return sum;
     }
 
-    /* Print the lattice configuration */
     void show_configuration(){
+        /* Print the lattice configuration */
+
         int value;
         cout << "Lattice configuration: " << endl;
-
         if (geometry_flag == 1){
             for (int i = 0; i < tot_lenght_; i++){
                 value = lattice_[i];
@@ -191,7 +197,6 @@ public:
                 cout << value << " ";
             }
             cout << endl << endl;
-
         } else if (geometry_flag == 2){
             for (int i = 0; i < tot_lenght_; i++){
                 value = lattice_[i];
@@ -205,8 +210,9 @@ public:
         }
     }
 
-    /* Save the current configuration */
     void save_configuration(string file_state = "ising_state.dat"){
+        /* Save the current configuration */
+
         ofstream file;
         file.open(file_state);
         for (int i = 0; i < tot_lenght_; i++){
@@ -215,11 +221,11 @@ public:
         file.close();
     }
 
-    /* Load configuration from path */
     void load_configuration(string file_state = "ising_state.dat"){
+        /* Load configuration from path */
+
         int i = 0;
         ifstream file(file_state);
-
         cout << "Loading initial configuration..." << endl;
         if (file.is_open()) {
             while((file >> lattice_[i]) && (i < tot_lenght_)) i++;
@@ -235,18 +241,19 @@ public:
         }
     }
 
-    /* Print the nearest neighbors of the site index */
     void show_nearest_index(const int &index){
+        /* Print the nearest neighbors of the site index */
+
         int size;
         size = nearest_neighbors_[index].size();
-
         for (int i = 0; i < size; i++){
             cout << nearest_neighbors_[index][i] << " ";
         }
     }
 
-    /* Print the list of all nearest neighbors to each lattice site */
     void show_nearest_neighbors(){
+        /* Print the list of all nearest neighbors to each lattice site */
+
         for (int i = 0; i < tot_lenght_; i++){
             cout << "Nearest neighbors to " << i << " are: ";
             show_nearest_index(i);
@@ -255,8 +262,9 @@ public:
         cout << endl;
     }
 
-    /* Update the state of the lattice with a MC step */
     void update(double beta, double extfield){
+        /* Update the state of the lattice with a MC step */
+
         int ind;
         double random_number, force;
 
@@ -278,6 +286,6 @@ public:
         }
     }
 
-};/************************* End class ****************************************/
+};
 
 #endif

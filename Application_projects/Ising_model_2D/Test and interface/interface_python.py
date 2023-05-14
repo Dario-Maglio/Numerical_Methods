@@ -35,7 +35,7 @@ def plot_ene_and_mag():
         ene = []
         mag = []
 
-        directory = f"Side_{side}"
+        directory = f"../Data_simulations/Side_{side}"
         print("Loading directory " + directory)
 
         for beta in betas:

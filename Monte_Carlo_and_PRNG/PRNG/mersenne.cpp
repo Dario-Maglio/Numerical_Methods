@@ -4,7 +4,7 @@
 *
 *******************************************************************************/
 
-//----Preprocessor directives---------------------------------------------------
+//--- Preprocessor directives --------------------------------------------------
 
 #include <iostream>
 #include <fstream>       // file stream
@@ -19,17 +19,18 @@
 
 using namespace std;
 
-//----Contents------------------------------------------------------------------
+//--- Contents -----------------------------------------------------------------
 
-/* Linear congruent generator */
 inline unsigned long int lcg(unsigned long int x) {
+    /* Linear congruent generator */
     return (A * x + C) % M;
 }
 
+//--- Main ---------------------------------------------------------------------
 
-
-/* Main program */
 int main() {
+    /* Main program for PRNG */
+
     unsigned long int x = lcg(SEED);
     double random_lcg = x / (double) M;
 

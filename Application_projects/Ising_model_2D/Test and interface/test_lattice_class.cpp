@@ -4,7 +4,8 @@
 *
 *******************************************************************************/
 
-//----Preprocessor directives---------------------------------------------------
+//--- Preprocessor directives --------------------------------------------------
+
 #include <iostream>
 #include <string>
 #include <chrono>
@@ -12,39 +13,52 @@
 // Import the Class lattice
 #include "../ising_lattice_class.h"
 
-/*
-* CONFIGURATION PARAMETERS OF THE LATTICE
+using namespace std;
+
+/*******************************************************************************
+* PARAMETERS OF THE LATTICE
+*
 * SIDE = size of the lattice's side.
-* G_FLAG = lattice's geometry flag:
+*
+* G_FLAG = lattice's geometry flag.
 *          0 and others not implemented yet.
 *          1 for 1D periodic chain.
 *          2 for 2D square with PBC.
+*
 * I_FLAG = lattice's initial configuration flag:
 *          0 for cold initialization.
 *          1 for hot (random) initialization.
 *          2 for loading the previous configuration.
-*/
+*
+*******************************************************************************/
+
 #define SIDE 5
 #define G_FLAG 2
 #define I_FLAG 2
 
-/*
-* CONFIGURATION PARAMETERS OF THE SIMULATION
+/*******************************************************************************
+* PARAMETERS OF THE SIMULATION
+*
 * BETA = adimensional reciprocal of the product of the temperature and k_B.
+*
 * EXTFIELD = adimensional intensity of the external magnetic field.
+*
 * I_DECORREL = MC-updates of the lattice between different measurements.
+*
 * LOOPS = timed MC-updates
-*/
+*
+*******************************************************************************/
+
 #define BETA 0.330
 #define EXTFIELD 0.
 #define I_DECORREL 5
 #define LOOPS 100
 
-using namespace std;
-
-//----Contents------------------------------------------------------------------
+//--- Main Test ----------------------------------------------------------------
 
 int main(){
+    /* Test the methods of the lattice Class. */
+
     string file_path;
     double ener, magn;
     lattice ising(SIDE, G_FLAG, I_FLAG);

@@ -1,10 +1,10 @@
-"""/****************************************************************************
+"""*****************************************************************************
 *
 * Main program for the parallel Ising simulations
 *
-****************************************************************************/"""
+*****************************************************************************"""
 
-#-----Initial imports and definitions-------------------------------------------
+#---- Initial imports and definitions ------------------------------------------
 
 import time
 
@@ -15,11 +15,15 @@ import multiprocessing as mp
 ROOT.gInterpreter.ProcessLine('#include "ising_lattice_class.h"')
 ROOT.gInterpreter.ProcessLine('#include "ising_run_simulation.h"')
 
-"""
-* CONFIGURATION PARAMETERS OF THE LATTICE
+"""*****************************************************************************
+* CONFIGURATION PARAMETERS OF THE SIMULATION
+*
 * BETA_SEP = separation between the betas of different simulations.
+*
 * SIDE_SEP = separation between the sides of different simulations.
-"""
+*
+*****************************************************************************"""
+
 BETA_INI = 0.3600
 BETA_FIN = 0.5101
 BETA_SEP = 0.0025
@@ -32,9 +36,11 @@ betas = np.arange(BETA_INI, BETA_FIN, BETA_SEP, dtype='float')
 args = np.meshgrid(sides, betas)
 sides, betas = np.reshape(args, (2, -1))
 
-#-----Contents------------------------------------------------------------------
+#---- Main ---------------------------------------------------------------------
 
 if __name__ == '__main__':
+    """ Main program start a thread for each side and beta """
+
     # Define an output queue if you need results
     output = mp.Queue()
 

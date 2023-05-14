@@ -4,7 +4,8 @@
 *
 *******************************************************************************/
 
-//----Preprocessor directives---------------------------------------------------
+//--- Preprocessor directives --------------------------------------------------
+
 #include <iostream>
 #include <fstream>
 #include <cmath>
@@ -12,32 +13,6 @@
 #include <string>
 #include <random>
 
-/*
-* CONFIGURATION PARAMETERS
-* DATA = number of desired estimators to save on a file
-* SIDE_SEP = separation between the sides of different simulations.
-* BETA_SEP = separation between the betas of different simulations.
-*/
-#define DATA 9
-#define SIDE_MIN 20
-#define SIDE_MAX 60
-#define SIDE_SEP 10
-#define BETA_INI 0.3600
-#define BETA_FIN 0.5100
-#define BETA_SEP 0.0025
-
-/*
-* ALGORITHMS PARAMETERS
-* BLOCKING = number of blocks reductions in the blocking algorithm
-* CORR_LENGHT = lenght of the correlated blocks in the bootstrap algorithm
-* NUM_FAKE_SAMP = number of fake samples of the bootstrap algorithm
-*/
-#define BLOCKING 7
-#define MIN_CORR_LENGHT 2
-#define MAX_CORR_LENGHT 300
-#define NUM_FAKE_SAMP 300
-
-// Define the namespace
 using namespace std;
 
 // Define the PRNG
@@ -46,10 +21,44 @@ mt19937 generator(SEED);
 //random_device device;
 //mt19937 generator(device());
 
-//----Contents------------------------------------------------------------------
+/*******************************************************************************
+* PARAMETERS OF THE SIMULATION
+*
+* BETA_SEP = separation between the betas of different simulations.
+*
+* SIDE_SEP = separation between the sides of different simulations.
+*
+*******************************************************************************/
 
-// Compute sigma with the blocking algorithm
+#define DATA 9
+#define SIDE_MIN 20
+#define SIDE_MAX 60
+#define SIDE_SEP 10
+#define BETA_INI 0.3600
+#define BETA_FIN 0.5100
+#define BETA_SEP 0.0025
+
+/*******************************************************************************
+* PARAMETERS OF THE ALGORITHMS
+*
+* BLOCKING = number of blocks reductions in the blocking algorithm.
+*
+* CORR_LENGHT = lenght of the correlated blocks in the bootstrap algorithm.
+*
+* NUM_FAKE_SAMP = number of fake samples of the bootstrap algorithm.
+*
+*******************************************************************************/
+
+#define BLOCKING 7
+#define MIN_CORR_LENGHT 2
+#define MAX_CORR_LENGHT 300
+#define NUM_FAKE_SAMP 300
+
+//--- Contents -----------------------------------------------------------------
+
 double blocking(vector<double>& x, int blocking_iteration, ofstream &file){
+    /* Compute sigma with the blocking algorithm */
+
     int steps = x.size(), k_steps = steps;
     double x_ave = 0., var = 0.;
     vector<double> x_k;
@@ -90,9 +99,10 @@ double blocking(vector<double>& x, int blocking_iteration, ofstream &file){
   return sqrt(var);
 }
 
-/* Bootstrap with autocorrelation */
-double bootstrap_corr(vector<double>& x, int num_fake_samples, int max_lenght,
-                      ofstream &file){
+double bootstrap_corr(vector<double>& x, int num_fake_samples,
+                      int max_lenght, ofstream &file){
+    /* Bootstrap with autocorrelation */
+
     int steps = x.size(), lenght, draws, rand_index, k;
     double estimator, est_ave, est_var, samp_ave;
     vector<double> fake_sample, measures;
@@ -112,12 +122,12 @@ double bootstrap_corr(vector<double>& x, int num_fake_samples, int max_lenght,
         for (int i = 0; i < num_fake_samples; i++){
 
             samp_ave = 0.;
-            // generate the i-fake_sample
+            // Generate the i-fake_sample
             for (int j = 0; j < draws; j++){
-                // extract the j-random_int
+                // Extract the j-random_int
                 rand_index = randomint(generator);
 
-                // push the j-block
+                // Push the j-block
                 k = 0;
                 while (k < lenght && fake_sample.size() < steps){
                     if (rand_index + k == steps) rand_index -= steps;
@@ -128,7 +138,7 @@ double bootstrap_corr(vector<double>& x, int num_fake_samples, int max_lenght,
             }
             samp_ave = samp_ave / steps;
 
-            // compute the variance, which here is our estimator
+            // Compute the variance, which here is our estimator
             estimator = 0.;
             for(auto val: fake_sample) estimator += pow(val - samp_ave, 2);
             estimator = estimator / (steps - 1);     // remember per volume
@@ -139,7 +149,7 @@ double bootstrap_corr(vector<double>& x, int num_fake_samples, int max_lenght,
         }
         est_ave = est_ave / num_fake_samples;
 
-        // compute the variance over num_fake_samples fake samples
+        // Compute the variance over num_fake_samples fake samples
         est_var = 0.;
         for (auto val : measures) est_var += pow(val - est_ave, 2);
         est_var = est_var / (num_fake_samples - 1);  // per N divided by N - 1
@@ -154,9 +164,10 @@ double bootstrap_corr(vector<double>& x, int num_fake_samples, int max_lenght,
     return sqrt(est_var);
 }
 
-/* Operations over each file */
 void file_operations(int side, float beta, vector<double>& measures,
                      ofstream &file_analysis){
+    /* Operations over each file */
+
     int lenght = 0;
     double ene_ave = 0., mag_ave = 0., ene_var = 0., mag_var = 0., cumul = 0.;
     string file_name;
@@ -179,13 +190,13 @@ void file_operations(int side, float beta, vector<double>& measures,
         }
         file.close();
 
-        // compute and store the averages
+        // Compute and store the averages
         ene_ave = ene_ave / lenght;
         mag_ave = mag_ave / lenght;
         measures[0] = ene_ave;
         measures[2] = mag_ave;
 
-        // compute the errors with blocking algorithm
+        // Compute the errors with blocking algorithm
         cout << endl << "side: " << side << " | beta: " << beta << endl;
         file_analysis << endl << "L: " << side << " | beta: " << beta << endl;
         file_analysis << side << " " << beta << " --- energy error: " << endl;
@@ -193,21 +204,21 @@ void file_operations(int side, float beta, vector<double>& measures,
         file_analysis << side << " " << beta << " --- magnet error: " << endl;
         measures[3] = blocking(magnetis, BLOCKING, file_analysis);
 
-        // compute the estimators
+        // Compute the estimators
         for(auto val: energies) ene_var += pow(val - ene_ave, 2);
         measures[4] = ene_var / (lenght - 1);    // remember per volume
 
         for(auto val: magnetis) mag_var += pow(val - mag_ave, 2);
         measures[6] = mag_var / (lenght - 1);    // remember per volume
 
-        // compute the Binder cumulant
+        // Compute the Binder cumulant
         mag_var = 0.;
         for(auto val: magnetis) mag_var += pow(val, 2);
         for(auto val: magnetis) cumul += pow(val, 4);
         cumul = (cumul * lenght) / pow(mag_var, 2);
         measures[8] = cumul;
 
-        // compute the error with bootstrap algorithm
+        // Compute the error with bootstrap algorithm
         file_analysis << side << " " << beta << " --- heat error: " << endl;
         measures[5] = bootstrap_corr(energies, NUM_FAKE_SAMP, MAX_CORR_LENGHT,
                                      file_analysis);
@@ -278,8 +289,10 @@ void partial_analysis(){
     file_analysis.close();
 }
 
-/* Main for the data analysis */
+//--- Main ---------------------------------------------------------------------
+
 int main(){
+    /* Main program for the data analysis. */
 
     // complete_analysis();
 

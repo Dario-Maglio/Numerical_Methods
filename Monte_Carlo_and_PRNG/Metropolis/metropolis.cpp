@@ -4,7 +4,7 @@
 *
 *******************************************************************************/
 
-//----Preprocessor directives---------------------------------------------------
+//--- Preprocessor directives --------------------------------------------------
 
 #include <iostream>
 #include <fstream>
@@ -28,20 +28,19 @@
 
 using namespace std;
 
-// constants
 constexpr double pi = 3.14159265358979323846;
 
-// define the PRNG
+// Define the PRNG
 mt19937_64 generator(SEED);
 uniform_real_distribution<double> prng(0.0, 1.0);
 uniform_int_distribution<long int> randomint(0, DIM_SUBSAMP);
 
 //---- Contents ----------------------------------------------------------------
 
-/* Generate random numbers with the Box-Muller algorithm */
 void generate_BM_data(){
-    double x1, x2, y1, y2;
+    /* Generate random numbers with the Box-Muller algorithm */
 
+    double x1, x2, y1, y2;
     ofstream file_b;
     file_b.open("file_box_muller.dat");
 
@@ -59,8 +58,9 @@ void generate_BM_data(){
     file_b.close();
 }
 
-/* Load Box-Muller data and compute the average */
 double load_box_muller(int dim_subsample, vector<double>& y){
+    /* Load Box-Muller data and compute the average */
+
     int steps = 0;
     double value, y_ave = 0.;
 
@@ -82,14 +82,16 @@ double load_box_muller(int dim_subsample, vector<double>& y){
     return y_ave;
 }
 
-/* Probability ratio function for MC data */
 inline double prf(double q, double q_try) {
+    /* Probability ratio function for MC data */
+
     q = pow(q - AVERAGE, 2) - pow(q_try - AVERAGE, 2);
     return exp(q / (2*pow(SIGMA, 2)));
 }
 
-/* Generate MC data */
 void generate_MC_data() {
+    /* Generate MC data */
+
     double x, y, q_try, q = START, sample_average = 0.;
 
     // create files
@@ -126,33 +128,35 @@ void generate_MC_data() {
     file_a.close();
 }
 
-/* Load MC data and compute the average */
 double load_and_average(int dim_therm, int dim_subsample, vector<double>& x){
-  int steps = 0;
-  double value, x_ave = 0.;
+    /* Load MC data and compute the average */
 
-  // load the data file and compute the average
-  ifstream data("file_metropol.dat");
-  if (data.is_open()) {
-      while ((data >> value) && (steps < dim_therm)) steps += 1;
-      steps = 0;
-      while ((data >> value) && (steps <= dim_subsample)){
-          steps += 1;
-          x_ave += value;
-          x.push_back(value);
-      }
-      data.close();
-      x_ave = x_ave / steps;
-  } else {
-      cerr << "Error: unable to open the file." << endl;
-      exit(1);
-  }
+    int steps = 0;
+    double value, x_ave = 0.;
 
-  return x_ave;
+    // load the data file and compute the average
+    ifstream data("file_metropol.dat");
+    if (data.is_open()) {
+        while ((data >> value) && (steps < dim_therm)) steps += 1;
+        steps = 0;
+        while ((data >> value) && (steps <= dim_subsample)){
+            steps += 1;
+            x_ave += value;
+            x.push_back(value);
+        }
+        data.close();
+        x_ave = x_ave / steps;
+    } else {
+        cerr << "Error: unable to open the file." << endl;
+        exit(1);
+    }
+
+    return x_ave;
 }
 
-// Compute sigma with the blocking algorithm
 double blocking(int blocking_iteration, vector<double>& x){
+    /* Compute sigma with the blocking algorithm */
+
     int steps = x.size(), k_steps = steps;
     double x_ave = 0., var = 0.;
     vector<double> x_k;
@@ -193,8 +197,9 @@ double blocking(int blocking_iteration, vector<double>& x){
   return sqrt(var);
 }
 
-/* Autocorrelation function, variance and error */
 double autocorrelation(vector<double>& x, float x_ave){
+    /* Autocorrelation function, variance and error */
+
     int k = 0;
     int steps = x.size();
     double value = 1., tau_int = 0., var_bias = 0., sigma;
@@ -227,8 +232,9 @@ double autocorrelation(vector<double>& x, float x_ave){
     return sigma;
 }
 
-/* Estimator to be evaluated on the sample*/
 inline double estimator(vector<double>& x){
+    /* Estimator to be evaluated on the sample*/
+
     int steps = x.size();
     double pow2 = 0., pow4 = 0.;
 
@@ -241,8 +247,9 @@ inline double estimator(vector<double>& x){
     return pow4;
 }
 
-/* Bootstrap without autocorrelation */
 double bootstrap(vector<double>& x, int num_fake_samples){
+    /* Bootstrap without autocorrelation */
+
     int steps = x.size();
     double value, fake_ave, sigma;
     vector<double> fake_sample, fake_values;
@@ -294,8 +301,9 @@ double bootstrap(vector<double>& x, int num_fake_samples){
     return sigma;
 }
 
-/* Bootstrap with autocorrelation */
 double bootstrap_corr(vector<double>& x, int num_fake_samples, int max_lenght){
+    /* Bootstrap with autocorrelation */
+
     int steps = x.size(), draws, index, l;
     double value, fake_ave, sigma;
     vector<double> fake_sample, fake_values;
@@ -356,8 +364,6 @@ double bootstrap_corr(vector<double>& x, int num_fake_samples, int max_lenght){
     file_boot.close();
     return sigma;
 }
-
-
 
 //---- Main --------------------------------------------------------------------
 

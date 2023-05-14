@@ -4,7 +4,8 @@
 *
 *******************************************************************************/
 
-//----Preprocessor directives---------------------------------------------------
+//--- Preprocessor directives --------------------------------------------------
+
 #ifndef ISING_RUN_SIMULATION_H
 #define ISING_RUN_SIMULATION_H
 
@@ -15,32 +16,40 @@
 // Import the Class lattice
 #include "ising_lattice_class.h"
 
-/*
+using namespace std;
+
+/*******************************************************************************
 * PARAMETERS OF THE SIMULATION
+*
 * G_FLAG = lattice's geometry flag:
 *          0 and others not implemented yet.
 *          1 for 1D periodic chain.
 *          2 for 2D square with PBC.
+*
 * I_FLAG = lattice's initial configuration flag:
 *          0 for cold initialization.
 *          1 for hot (random) initialization.
 *          2 for loading the previous configuration and append data.
+*
 * EXTFIELD = adimensional intensity of the external magnetic field.
+*
 * I_DECORREL = MC-updates of the lattice between different measurements.
+*
 * MEASURES = desired number of measures for each value of beta.
-*/
+*
+*******************************************************************************/
+
 #define G_FLAG 2
 #define I_FLAG 2
 #define EXTFIELD 0.
 #define I_DECORREL 10
 #define MEASURES 8
 
-using namespace std;
+//--- Contents -----------------------------------------------------------------
 
-//----Contents------------------------------------------------------------------
-
-/* MC-simulation for a given side and beta */
 void run_simulation(int side, float beta){
+    /* MC-simulation for a given side and beta */
+
     ofstream file;
     string directory, name_file_data, name_file_state, message;
     lattice ising(side, G_FLAG, I_FLAG);

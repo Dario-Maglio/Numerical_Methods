@@ -1,4 +1,4 @@
-"""Basic ODE and SDE integrator script.
+"""Basic ODE and SDE integrator script in python.
 
 Before starting:
 -) A and B define the temporal observation window.
