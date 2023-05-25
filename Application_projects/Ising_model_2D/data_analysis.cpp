@@ -173,8 +173,8 @@ void file_operations(int side, float beta, vector<double>& measures,
     string file_name;
     vector<double> energies, magnetis;
 
-    file_name = "Side_" + to_string(side) + "/side_" + to_string(side) +
-                "_beta_" + to_string(beta) + ".dat";
+    file_name = "Data_simulations/Side_" + to_string(side) + "/side_" +
+                to_string(side) + "_beta_" + to_string(beta) + ".dat";
     ifstream file(file_name);
 
     if (file.is_open()) {
