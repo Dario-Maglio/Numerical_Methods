@@ -43,7 +43,7 @@ using namespace std;
 #define I_FLAG 2
 #define EXTFIELD 0.
 #define I_DECORREL 10
-#define MEASURES 8
+#define MEASURES 100
 
 //--- Contents -----------------------------------------------------------------
 
@@ -68,7 +68,7 @@ void run_simulation(int side, float beta){
         ising.load_configuration(directory + name_file_state);
     } else {
         // Thermalization phase
-        for(int i = 0; i < (50 * I_DECORREL); i++) ising.update(beta, EXTFIELD);
+        for(int i = 0; i < (100 * I_DECORREL); i++) ising.update(beta, EXTFIELD);
     }
 
     // Print initial energy and magnetization
