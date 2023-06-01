@@ -8,6 +8,7 @@ import os
 
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.optimize import curve_fit
 
 #*******************************************************************************
 # PARAMETERS OF THE SIMULATION
@@ -46,27 +47,31 @@ def load_data(data):
 def plot_one(data):
     """ Plot one thing per time """
 
-    title = "Cumulante di Binder"
+    title = "Susceptibility"
+    print("\nPlot " + title + "\n")
+
     fig = plt.figure(title)
-    plt.title(title)
-    plt.ylabel(r'$ C_B $')
-    plt.xlabel(r'$\beta$')
     plt.style.use('seaborn-whitegrid')
+    plt.title(title)
+    plt.ylabel(r'$ \chi $')
+    plt.xlabel(r'$\beta$')
 
     for side in sides:
-        x, _, _, _, _, _, _, _, _, y, y_err = data[side]
-        plt.errorbar(x, y, yerr=y_err, fmt='-x', label=f'side = {side}')
+        """ betas, enes, enes_err, mags, mags_err,
+        heat, heat_err, chi, chi_err, cum, cum_err """
+        x, _, _, _, _, _, _, y, y_err, _, _ = data[side]
+        plt.errorbar(x, y, yerr=y_err, fmt='.', label=f'side = {side}')
 
-    print("\nPlot " + title + "\n")
-    plt.legend(loc='lower left')
+    plt.legend(loc='upper right')
+    plt.savefig(os.path.join("Plots_and_fit", title + ".png"))
     plt.show()
 
 def plot_all(data):
     """ Plot everything you can! """
 
-    plt.style.use('seaborn-whitegrid')
-
+    print("\nPlot simulation! \n")
     fig, axes = plt.subplots(2, 2, num="Plots from analysis", figsize=(14, 14))
+    plt.style.use('seaborn-whitegrid')
 
     axes[0, 0].set_title("Average energy density")
     axes[0, 0].set_ylabel(r'$ \langle \epsilon \rangle $')
@@ -95,37 +100,56 @@ def plot_all(data):
 
         axes[1, 1].errorbar(betas, chi, yerr=chi_err, fmt='.', label=f'side = {side}')
 
-
-    print("\nPlots are ready! \n")
     axes[0, 0].legend(loc='lower left')
+    plt.savefig(os.path.join("Plots_and_fit", "Simulation.png"))
     plt.show()
 
-def plot_cumulant(n, data):
+def function(x, a, b):
+    y = a*np.power(x, 2) + b
+    return y
+
+def cumulant(n, data):
     """ Plot Binder cumulant as a function of L for n-th value of beta """
 
-    cum=[]
-    cum_err=[]
+    x = []
+    cumulan = []
+    cum_err = []
     for side in sides:
         betas, _, _, _, _, _, _, _, _, y, y_err = data[side]
-        cum.append(y[n])
+        x.append(1 / side)
+        cumulan.append(y[n])
         cum_err.append(y_err[n])
 
-    title = f"Binder cumulant as a function of L for beta = {betas[n]}"
-    fig = plt.figure(title)
-    plt.title(title)
+    # Fit
+    parameters, covariance = curve_fit(function, x, cumulan, sigma=cum_err)
+    fit_a = parameters[0]
+    fit_b = parameters[1]
+    std_deviation = np.sqrt(np.diag(covariance))
+    fit_da = std_deviation[0]
+    fit_db = std_deviation[1]
+    print("\nFit parameters:")
+    print(f"{fit_a} \pm {fit_da} | {fit_b} \pm {fit_db}")
 
-    plt.style.use('seaborn-whitegrid')
-    plt.ylabel(r'$ C_B $')
-    plt.xlabel(r'$ L $')
+    chisq = np.sum(np.power((cumulan - function(x, fit_a, fit_b)/ cum_err), 2))
+    chisqrd = chisq / (len(x)-3)
+    print(f"Reduced chi squared: {chisq}")
 
-    plt.errorbar(sides, cum, yerr=cum_err, fmt='<',label=f'beta: {betas[n]}')
-
+    # Plot
+    title = f"Binder cumulant beta = {betas[n]}"
     print("\nPlot " + title + "\n")
-    plt.legend(loc='lower left')
-    plt.show()
 
-def fit():
-    pass
+    fig = plt.figure(title)
+    plt.style.use('seaborn-whitegrid')
+    plt.title(title)
+    plt.ylabel(r'$ C_B $')
+    plt.xlabel(r'$ 1 / L $')
+
+    fit_x = np.linspace(0., 0.051, 100)
+    plt.plot(fit_x, function(fit_x, fit_a, fit_b), '-', label='fit')
+    plt.errorbar(x, cumulan, yerr=cum_err, fmt='<',label=f'beta: {betas[n]}')
+
+    plt.savefig(os.path.join("Plots_and_fit", title + ".png"))
+    plt.show()
 
 #-------------------------------------------------------------------------------
 
@@ -136,7 +160,7 @@ if __name__ == '__main__':
     #plot_one(data)
     #plot_all(data)
 
-    #plot_cumulant(3, data)
-    plot_cumulant(52, data)
+    cumulant(8, data)
+    cumulant(50, data)
 
-    #fit()
+    #popt, pcov = curve_fit(func, xdata, ydata, bounds=(0, [3., 1., 0.5]))

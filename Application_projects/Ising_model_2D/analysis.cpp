@@ -55,14 +55,14 @@ mt19937 generator(SEED);
 
 #define BLOCKS 6
 #define MIN_CORR_LENGHT 2
-#define MAX_CORR_LENGHT 24
-#define NUM_FAKE_SAMP 10
-#define DIM_FAKE_SAMP 100
+#define MAX_CORR_LENGHT 512
+#define NUM_FAKE_SAMP 100
+#define DIM_FAKE_SAMP 10000
 
 //--- Contents -----------------------------------------------------------------
 
 double estimator(vector<double>& x){
-    /* susceptivity and specific heat / volume */
+    /* Susceptibility and specific heat / volume */
 
     int dim = x.size();
     double average = 0., estimator = 0;
@@ -113,10 +113,8 @@ double blocking(vector<double>& x, ofstream &file){
         x_ave = x_ave / k_steps;
 
         // compute variance
-        for(int i = 0; i < k_steps; i++) var += pow(x_k[i], 2);
-        var = var / k_steps;
-        var = var - pow(x_ave, 2);
-        var = var / (k_steps - 1);
+        for(int i = 0; i < k_steps; i++) var += pow(x_k[i] - x_ave, 2);
+        var = var / (k_steps * (k_steps - 1));
 
         file << "k steps " << k << " -> ";
         file << x_ave << " ± " << sqrt(var) << endl;
@@ -174,7 +172,7 @@ double bootstrap_corr(vector<double>& x, double (*estimator)(vector<double>& ), 
         // compute the estimator variance over fake samples
         est_var = 0.;
         for (auto val : measures) est_var += pow(val - est_ave, 2);
-        est_var = est_var / (NUM_FAKE_SAMP*(NUM_FAKE_SAMP - 1));
+        est_var = est_var / (NUM_FAKE_SAMP - 1);
 
         measures.clear();
 
@@ -231,7 +229,7 @@ void file_operations(int side, float beta, vector<double>& data,
         file_analysis << " --- magnet error: " << endl;
         data[3] = blocking(magnetis, file_analysis);
 
-        // Compute specific heat and susceptivity
+        // Compute specific heat and susceptibility
         data[4] = estimator(energies)* pow(side, 2);
         data[6] = estimator(magnetis)* pow(side, 2);
 
