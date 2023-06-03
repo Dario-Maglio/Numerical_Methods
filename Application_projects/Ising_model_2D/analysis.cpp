@@ -37,6 +37,9 @@ mt19937 generator(SEED);
 #define BETA_INI 0.3600
 #define BETA_FIN 0.5100
 #define BETA_SEP 0.0025
+#define BETA_C_INI 0.4153
+#define BETA_C_FIN 0.4500
+#define BETA_C_SEP 0.0010
 
 /*******************************************************************************
 * PARAMETERS OF THE ANALYSIS
@@ -55,9 +58,9 @@ mt19937 generator(SEED);
 
 #define BLOCKS 6
 #define MIN_CORR_LENGHT 2
-#define MAX_CORR_LENGHT 512
-#define NUM_FAKE_SAMP 100
-#define DIM_FAKE_SAMP 10000
+#define MAX_CORR_LENGHT 256
+#define NUM_FAKE_SAMP 150
+#define DIM_FAKE_SAMP 150000
 
 //--- Contents -----------------------------------------------------------------
 
@@ -111,7 +114,6 @@ double blocking(vector<double>& x, ofstream &file){
             x_ave += x_k[i];
         }
         x_ave = x_ave / k_steps;
-
         // compute variance
         for(int i = 0; i < k_steps; i++) var += pow(x_k[i] - x_ave, 2);
         var = var / (k_steps * (k_steps - 1));
@@ -185,8 +187,7 @@ double bootstrap_corr(vector<double>& x, double (*estimator)(vector<double>& ), 
 
 //--- File operations ----------------------------------------------------------
 
-void file_operations(int side, float beta, vector<double>& data,
-                     ofstream &file_analysis){
+void file_operations(int side, float beta, vector<double>& data, ofstream &file_analysis){
     /* Operations over each file */
     // for a given side and temperature, compute average energy, magnetization,
     // subscectivity, specific heat and their errors.
@@ -230,8 +231,8 @@ void file_operations(int side, float beta, vector<double>& data,
         data[3] = blocking(magnetis, file_analysis);
 
         // Compute specific heat and susceptibility
-        data[4] = estimator(energies)* pow(side, 2);
-        data[6] = estimator(magnetis)* pow(side, 2);
+        data[4] = estimator(energies) * pow(side, 2);
+        data[6] = estimator(magnetis) * pow(side, 2);
 
         // compute the errors with bootstrap algorithm
         file_analysis << " --- heat error / V : " << endl;
@@ -247,7 +248,6 @@ void file_operations(int side, float beta, vector<double>& data,
         data[9] = bootstrap_corr(magnetis, &binder, file_analysis);
 
         file_analysis << "-----------------------------" << endl << endl;
-
     } else {
         cerr << "Error: unable to open the file." << endl;
         exit(1);
@@ -275,13 +275,21 @@ void partial_analysis(){
     cout << endl << "Creating file: " << file_name << endl << endl;
     file_data.open(file_name);
 
+    // begin loop over betas
     for(float beta = BETA_INI; beta <= BETA_FIN; beta += BETA_SEP){
         file_operations(side_in, beta, data, file_analysis);
         file_data << beta << " ";
         for(int i = 0; i < DATA; i++) file_data << data[i] << " ";
         file_data << endl;
     }
-
+    // begin loop over central betas
+    file_analysis << "\n\nBegin loop over central betas\n";
+    for(float beta = BETA_C_INI; beta <= BETA_C_FIN; beta += BETA_C_SEP){
+        file_operations(side_in, beta, data, file_analysis);
+        file_data << beta << " ";
+        for(int i = 0; i < DATA; i++) file_data << data[i] << " ";
+        file_data << endl;
+    }
     file_data.close();
     file_analysis.close();
 }
@@ -311,6 +319,15 @@ void complete_analysis(){
             for(int i = 0; i < DATA; i++) file_data << data[i] << " ";
             file_data << endl;
         }
+        // begin loop over central betas
+        file_analysis << "\n\nBegin loop over central betas\n";
+        for(float beta = BETA_C_INI; beta <= BETA_C_FIN; beta += BETA_C_SEP){
+            file_operations(side, beta, data, file_analysis);
+            file_data << beta << " ";
+            for(int i = 0; i < DATA; i++) file_data << data[i] << " ";
+            file_data << endl;
+        }
+
         file_data.close();
         file_analysis.close();
     }
