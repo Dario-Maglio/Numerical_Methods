@@ -14,24 +14,28 @@
 
 using namespace std;
 
+
 /*******************************************************************************
 * PARAMETERS OF THE SIMULATION
 *
-* BETA_SEP = separation between the betas of different simulations.
-*
 * SIDE_SEP = separation between the sides of different simulations.
+*
+* BETA_SEP = separation between the betas of different simulations.
 *
 *******************************************************************************/
 
+#define SIDE_SEP 10
 #define SIDE_MIN 20
 #define SIDE_MAX 60
-#define SIDE_SEP 10
+// #define SIDE_MIN 70
+// #define SIDE_MAX 71
+
+#define BETA_SEP 0.0025
 #define BETA_INI 0.3600
 #define BETA_FIN 0.5100
-#define BETA_SEP 0.0025
-#define BETA_C_INI 0.4153
-#define BETA_C_FIN 0.4500
-#define BETA_C_SEP 0.0010
+// #define BETA_SEP 0.0010
+// #define BETA_INI 0.4153
+// #define BETA_FIN 0.4500
 
 //--- Main ---------------------------------------------------------------------
 
@@ -41,9 +45,6 @@ int main(){
     auto start = chrono::steady_clock::now();
     for(int side = SIDE_MIN; side <= SIDE_MAX; side += SIDE_SEP){
         for(float beta = BETA_INI; beta <= BETA_FIN; beta += BETA_SEP){
-            run_simulation(side, beta);
-        }
-        for(float beta = BETA_C_INI; beta <= BETA_C_FIN; beta += BETA_C_SEP){
             run_simulation(side, beta);
         }
     }

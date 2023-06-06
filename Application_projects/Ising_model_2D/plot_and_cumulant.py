@@ -53,6 +53,7 @@ def load_cumulant(data, n):
     for side in sides:
         # load cumulant data from analysis
         x, _, _, _, _, _, _, _, _, y, y_err = data[side]
+        x, y, y_err = zip(*sorted(zip(x, y, y_err)))
         # organize data in function of side lenght
         recL.append(1 / side)
         cumulan.append(y[n])
@@ -167,5 +168,5 @@ if __name__ == '__main__':
     plot_one(data)
     plot_all(data)
 
-    cumulant(data, 4)
-    cumulant(data, 52)
+    #cumulant(data, 6)
+    #cumulant(data, -10)

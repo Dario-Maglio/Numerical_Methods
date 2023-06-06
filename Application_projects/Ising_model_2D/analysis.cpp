@@ -17,9 +17,9 @@ using namespace std;
 
 // Define the PRNG
 #define SEED 42
-mt19937 generator(SEED);
+mt19937_64 generator(SEED);
 //random_device device;
-//mt19937 generator(device());
+//mt19937_64 generator(device());
 
 /*******************************************************************************
 * PARAMETERS OF THE SIMULATION
@@ -34,6 +34,7 @@ mt19937 generator(SEED);
 #define SIDE_MIN 20
 #define SIDE_MAX 60
 #define SIDE_SEP 10
+
 #define BETA_INI 0.3600
 #define BETA_FIN 0.5100
 #define BETA_SEP 0.0025
@@ -59,8 +60,8 @@ mt19937 generator(SEED);
 #define BLOCKS 6
 #define MIN_CORR_LENGHT 2
 #define MAX_CORR_LENGHT 256
-#define NUM_FAKE_SAMP 150
-#define DIM_FAKE_SAMP 150000
+#define NUM_FAKE_SAMP 300
+#define DIM_FAKE_SAMP 10000
 
 //--- Contents -----------------------------------------------------------------
 
@@ -114,6 +115,7 @@ double blocking(vector<double>& x, ofstream &file){
             x_ave += x_k[i];
         }
         x_ave = x_ave / k_steps;
+
         // compute variance
         for(int i = 0; i < k_steps; i++) var += pow(x_k[i] - x_ave, 2);
         var = var / (k_steps * (k_steps - 1));
@@ -127,7 +129,7 @@ double blocking(vector<double>& x, ofstream &file){
 }
 
 double bootstrap_corr(vector<double>& x, double (*estimator)(vector<double>& ), ofstream &file){
-    /* Bootstrap with autocorrelation */
+    /* Compute sigma with the bootstrap algorithm */
     // Given a sample x, generate NUM_FAKE_SAMP samples via resampling
     // and compute average and variance of an estimator while varying the
     // correlation lenght from MIN to MAX_CORR_LENGHT and writing them
@@ -188,9 +190,9 @@ double bootstrap_corr(vector<double>& x, double (*estimator)(vector<double>& ), 
 //--- File operations ----------------------------------------------------------
 
 void file_operations(int side, float beta, vector<double>& data, ofstream &file_analysis){
-    /* Operations over each file */
-    // for a given side and temperature, compute average energy, magnetization,
-    // subscectivity, specific heat and their errors.
+    /* Operations over each beta file */
+    // For a given side and beta, compute average energy, average
+    // magnetization, susceptibility, specific heat and errors.
 
     int measures = 0;
     double ene, mag, ene_ave = 0., mag_ave = 0.;
@@ -255,6 +257,10 @@ void file_operations(int side, float beta, vector<double>& data, ofstream &file_
 }
 
 void partial_analysis(){
+    /* Analysis for a specific side */
+    // Given an input side from bash, call file
+    // operations for each beta selected above.
+
     int side_in;
     string file_name;
     ofstream file_data, file_analysis;
@@ -290,11 +296,16 @@ void partial_analysis(){
         for(int i = 0; i < DATA; i++) file_data << data[i] << " ";
         file_data << endl;
     }
+
     file_data.close();
     file_analysis.close();
 }
 
 void complete_analysis(){
+    /* Analysis for each side */
+    // Call file operations for each
+    // side and beta selected above.
+
     string file_name;
     ofstream file_data, file_analysis;
     vector<double> data;

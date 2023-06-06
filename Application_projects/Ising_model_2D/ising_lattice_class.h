@@ -20,10 +20,10 @@
 using namespace std;
 
 // Define the PRNG
-#define SEED 42
+//#define SEED 42
+//mt19937_64 generator(SEED);
 random_device device;
-mt19937 generator(device());
-//mt19937 generator(SEED);
+mt19937_64 generator(device());
 
 // Define precise constants
 constexpr double pi = 3.14159265358979323846;
@@ -131,8 +131,6 @@ public:
             cerr << "Error: geometry not implemented." << endl;
             exit(1);
         }
-
-
 
         // Initialising the lattice configuration
         if (initial_flag == 0) {

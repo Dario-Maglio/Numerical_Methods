@@ -32,9 +32,9 @@ using namespace std;
 *
 *******************************************************************************/
 
-#define SIDE 20
+#define SIDE 70
 #define G_FLAG 2
-#define I_FLAG 1
+#define I_FLAG 2
 
 /*******************************************************************************
 * PARAMETERS OF THE SIMULATION
@@ -52,7 +52,7 @@ using namespace std;
 #define BETA 0.370
 #define EXTFIELD 0.
 #define I_DECORREL 10
-#define LOOPS 100
+#define LOOPS 1000
 
 //--- Main Test ----------------------------------------------------------------
 
