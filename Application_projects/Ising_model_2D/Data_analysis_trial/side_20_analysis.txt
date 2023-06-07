@@ -1,0 +1,651 @@
+-----------------------------
+side: 20 | beta: 0.38
+-----------------------------
+ --- energy error: 
+Initial sample dimension: 2100
+k steps 1 -> -1.00665 ± 0.00257961
+k steps 2 -> -1.00665 ± 0.00274509
+Final sample dimension: 525
+ --- magnet error: 
+Initial sample dimension: 2100
+k steps 1 -> 0.22435 ± 0.00417364
+k steps 2 -> 0.22435 ± 0.00502634
+Final sample dimension: 525
+ --- heat error / V : 
+correl lenght 2 -> 0.0115157 ± 0.000374431
+correl lenght 4 -> 0.0114263 ± 0.000327209
+correl lenght 8 -> 0.0117184 ± 0.000500943
+correl lenght 16 -> 0.0114921 ± 0.000430074
+correl lenght 32 -> 0.0114512 ± 0.000342718
+correl lenght 64 -> 0.0114218 ± 0.000391127
+correl lenght 128 -> 0.0113834 ± 0.000524335
+ --- chi error / V : 
+correl lenght 2 -> 0.0235001 ± 0.000809671
+correl lenght 4 -> 0.0232092 ± 0.000677902
+correl lenght 8 -> 0.0238801 ± 0.00092814
+correl lenght 16 -> 0.023701 ± 0.00107069
+correl lenght 32 -> 0.0236788 ± 0.0014263
+correl lenght 64 -> 0.023936 ± 0.00128909
+correl lenght 128 -> 0.0238735 ± 0.00105892
+-----------------------------
+
+-----------------------------
+side: 20 | beta: 0.385
+-----------------------------
+ --- energy error: 
+Initial sample dimension: 2100
+k steps 1 -> -1.0249 ± 0.00259414
+k steps 2 -> -1.0249 ± 0.00283295
+Final sample dimension: 525
+ --- magnet error: 
+Initial sample dimension: 2100
+k steps 1 -> 0.238924 ± 0.0044145
+k steps 2 -> 0.238924 ± 0.00532416
+Final sample dimension: 525
+ --- heat error / V : 
+correl lenght 2 -> 0.0117558 ± 0.000368971
+correl lenght 4 -> 0.0118205 ± 0.00048333
+correl lenght 8 -> 0.0118509 ± 0.000440207
+correl lenght 16 -> 0.0118794 ± 0.000387669
+correl lenght 32 -> 0.0117659 ± 0.000400828
+correl lenght 64 -> 0.0117246 ± 0.000404315
+correl lenght 128 -> 0.01182 ± 0.00034041
+ --- chi error / V : 
+correl lenght 2 -> 0.0263077 ± 0.000854598
+correl lenght 4 -> 0.0263126 ± 0.00109906
+correl lenght 8 -> 0.0261549 ± 0.0011992
+correl lenght 16 -> 0.0260456 ± 0.00145172
+correl lenght 32 -> 0.0262612 ± 0.00101985
+correl lenght 64 -> 0.026199 ± 0.000926046
+correl lenght 128 -> 0.0267113 ± 0.00085259
+-----------------------------
+
+-----------------------------
+side: 20 | beta: 0.39
+-----------------------------
+ --- energy error: 
+Initial sample dimension: 2100
+k steps 1 -> -1.05214 ± 0.00273391
+k steps 2 -> -1.05214 ± 0.0029599
+Final sample dimension: 525
+ --- magnet error: 
+Initial sample dimension: 2100
+k steps 1 -> 0.251683 ± 0.00477745
+k steps 2 -> 0.251683 ± 0.00591728
+Final sample dimension: 525
+ --- heat error / V : 
+correl lenght 2 -> 0.0126896 ± 0.000374966
+correl lenght 4 -> 0.0125652 ± 0.000450568
+correl lenght 8 -> 0.0125325 ± 0.000354975
+correl lenght 16 -> 0.0126141 ± 0.000511469
+correl lenght 32 -> 0.0125179 ± 0.00054327
+correl lenght 64 -> 0.0127104 ± 0.000543468
+correl lenght 128 -> 0.0125996 ± 0.000646198
+ --- chi error / V : 
+correl lenght 2 -> 0.0294004 ± 0.000713124
+correl lenght 4 -> 0.0296802 ± 0.0011001
+correl lenght 8 -> 0.0293129 ± 0.00123676
+correl lenght 16 -> 0.0297096 ± 0.00153163
+correl lenght 32 -> 0.0294768 ± 0.00173224
+correl lenght 64 -> 0.0289935 ± 0.00162344
+correl lenght 128 -> 0.0287749 ± 0.00186569
+-----------------------------
+
+-----------------------------
+side: 20 | beta: 0.395
+-----------------------------
+ --- energy error: 
+Initial sample dimension: 2100
+k steps 1 -> -1.08822 ± 0.00284871
+k steps 2 -> -1.08822 ± 0.00317352
+Final sample dimension: 525
+ --- magnet error: 
+Initial sample dimension: 2100
+k steps 1 -> 0.29825 ± 0.00524264
+k steps 2 -> 0.29825 ± 0.00656579
+Final sample dimension: 525
+ --- heat error / V : 
+correl lenght 2 -> 0.0135897 ± 0.00054021
+correl lenght 4 -> 0.0134862 ± 0.000375013
+correl lenght 8 -> 0.0136241 ± 0.00046408
+correl lenght 16 -> 0.0136473 ± 0.000532892
+correl lenght 32 -> 0.0134661 ± 0.00044668
+correl lenght 64 -> 0.0135475 ± 0.000457711
+correl lenght 128 -> 0.0135927 ± 0.000487738
+ --- chi error / V : 
+correl lenght 2 -> 0.0346411 ± 0.000982303
+correl lenght 4 -> 0.0342937 ± 0.00120237
+correl lenght 8 -> 0.0345928 ± 0.0014344
+correl lenght 16 -> 0.0348736 ± 0.00157377
+correl lenght 32 -> 0.0348259 ± 0.00114556
+correl lenght 64 -> 0.0350314 ± 0.00166319
+correl lenght 128 -> 0.0347671 ± 0.00152075
+-----------------------------
+
+-----------------------------
+side: 20 | beta: 0.4
+-----------------------------
+ --- energy error: 
+Initial sample dimension: 2100
+k steps 1 -> -1.11116 ± 0.00299861
+k steps 2 -> -1.11116 ± 0.00338383
+Final sample dimension: 525
+ --- magnet error: 
+Initial sample dimension: 2100
+k steps 1 -> 0.312367 ± 0.00573411
+k steps 2 -> 0.312367 ± 0.00724404
+Final sample dimension: 525
+ --- heat error / V : 
+correl lenght 2 -> 0.0146574 ± 0.000472023
+correl lenght 4 -> 0.0147598 ± 0.000556354
+correl lenght 8 -> 0.0148332 ± 0.000506123
+correl lenght 16 -> 0.0147804 ± 0.000594381
+correl lenght 32 -> 0.0145999 ± 0.000605374
+correl lenght 64 -> 0.0148175 ± 0.000488632
+correl lenght 128 -> 0.0147018 ± 0.000361546
+ --- chi error / V : 
+correl lenght 2 -> 0.0398912 ± 0.00105519
+correl lenght 4 -> 0.0399399 ± 0.00143024
+correl lenght 8 -> 0.040269 ± 0.00115716
+correl lenght 16 -> 0.0401426 ± 0.00173489
+correl lenght 32 -> 0.0401028 ± 0.0017218
+correl lenght 64 -> 0.0401255 ± 0.00133557
+correl lenght 128 -> 0.0405494 ± 0.00175855
+-----------------------------
+
+-----------------------------
+side: 20 | beta: 0.405
+-----------------------------
+ --- energy error: 
+Initial sample dimension: 2100
+k steps 1 -> -1.14983 ± 0.0034343
+k steps 2 -> -1.14983 ± 0.00407363
+Final sample dimension: 525
+ --- magnet error: 
+Initial sample dimension: 2100
+k steps 1 -> 0.358331 ± 0.00626598
+k steps 2 -> 0.358331 ± 0.00806483
+Final sample dimension: 525
+ --- heat error / V : 
+correl lenght 2 -> 0.0177585 ± 0.00050431
+correl lenght 4 -> 0.0179389 ± 0.000588977
+correl lenght 8 -> 0.017759 ± 0.000627775
+correl lenght 16 -> 0.0178489 ± 0.000744906
+correl lenght 32 -> 0.0177331 ± 0.000793607
+correl lenght 64 -> 0.0177752 ± 0.000648186
+correl lenght 128 -> 0.0179387 ± 0.00069669
+ --- chi error / V : 
+correl lenght 2 -> 0.0467473 ± 0.00114425
+correl lenght 4 -> 0.0460986 ± 0.00126142
+correl lenght 8 -> 0.046667 ± 0.00167697
+correl lenght 16 -> 0.0466199 ± 0.00151703
+correl lenght 32 -> 0.0472618 ± 0.00147999
+correl lenght 64 -> 0.0467059 ± 0.00139743
+correl lenght 128 -> 0.0468963 ± 0.00135379
+-----------------------------
+
+-----------------------------
+side: 20 | beta: 0.41
+-----------------------------
+ --- energy error: 
+Initial sample dimension: 2100
+k steps 1 -> -1.18254 ± 0.00359954
+k steps 2 -> -1.18254 ± 0.00433143
+Final sample dimension: 525
+ --- magnet error: 
+Initial sample dimension: 2100
+k steps 1 -> 0.397021 ± 0.00652881
+k steps 2 -> 0.397021 ± 0.00852961
+Final sample dimension: 525
+ --- heat error / V : 
+correl lenght 2 -> 0.0186132 ± 0.000747453
+correl lenght 4 -> 0.018623 ± 0.00077824
+correl lenght 8 -> 0.0188688 ± 0.000600954
+correl lenght 16 -> 0.0190979 ± 0.00065151
+correl lenght 32 -> 0.0187251 ± 0.0010055
+correl lenght 64 -> 0.0185468 ± 0.000874186
+correl lenght 128 -> 0.0187537 ± 0.000838547
+ --- chi error / V : 
+correl lenght 2 -> 0.0497297 ± 0.00120593
+correl lenght 4 -> 0.049831 ± 0.0014788
+correl lenght 8 -> 0.0494718 ± 0.00119092
+correl lenght 16 -> 0.0493255 ± 0.00176818
+correl lenght 32 -> 0.0493151 ± 0.00125949
+correl lenght 64 -> 0.0488864 ± 0.00111077
+correl lenght 128 -> 0.0488018 ± 0.00130004
+-----------------------------
+
+-----------------------------
+side: 20 | beta: 0.415
+-----------------------------
+ --- energy error: 
+Initial sample dimension: 2100
+k steps 1 -> -1.22516 ± 0.00366841
+k steps 2 -> -1.22516 ± 0.00440779
+Final sample dimension: 525
+ --- magnet error: 
+Initial sample dimension: 2100
+k steps 1 -> 0.455402 ± 0.00649422
+k steps 2 -> 0.455402 ± 0.00852561
+Final sample dimension: 525
+ --- heat error / V : 
+correl lenght 2 -> 0.0200328 ± 0.000634551
+correl lenght 4 -> 0.0200576 ± 0.000559729
+correl lenght 8 -> 0.0200411 ± 0.000741227
+correl lenght 16 -> 0.0200844 ± 0.00062463
+correl lenght 32 -> 0.0199648 ± 0.000591646
+correl lenght 64 -> 0.0201125 ± 0.000561385
+correl lenght 128 -> 0.0200097 ± 0.000562281
+ --- chi error / V : 
+correl lenght 2 -> 0.0494072 ± 0.00132009
+correl lenght 4 -> 0.0496318 ± 0.00159465
+correl lenght 8 -> 0.0493948 ± 0.00161457
+correl lenght 16 -> 0.0499823 ± 0.00171553
+correl lenght 32 -> 0.049671 ± 0.0018743
+correl lenght 64 -> 0.0495399 ± 0.00189751
+correl lenght 128 -> 0.0494699 ± 0.00191172
+-----------------------------
+
+-----------------------------
+side: 20 | beta: 0.42
+-----------------------------
+ --- energy error: 
+Initial sample dimension: 2100
+k steps 1 -> -1.26889 ± 0.00386059
+k steps 2 -> -1.26889 ± 0.00467653
+Final sample dimension: 525
+ --- magnet error: 
+Initial sample dimension: 2100
+k steps 1 -> 0.499671 ± 0.00684185
+k steps 2 -> 0.499671 ± 0.00909115
+Final sample dimension: 525
+ --- heat error / V : 
+correl lenght 2 -> 0.0209445 ± 0.0005431
+correl lenght 4 -> 0.0211114 ± 0.000632927
+correl lenght 8 -> 0.0210428 ± 0.000802992
+correl lenght 16 -> 0.0210537 ± 0.000660531
+correl lenght 32 -> 0.0211766 ± 0.000653174
+correl lenght 64 -> 0.0212031 ± 0.000791985
+correl lenght 128 -> 0.0214181 ± 0.000821401
+ --- chi error / V : 
+correl lenght 2 -> 0.0538231 ± 0.00158113
+correl lenght 4 -> 0.0544044 ± 0.00172764
+correl lenght 8 -> 0.0538961 ± 0.0020506
+correl lenght 16 -> 0.0542831 ± 0.00302387
+correl lenght 32 -> 0.0537521 ± 0.0031341
+correl lenght 64 -> 0.053964 ± 0.00298759
+correl lenght 128 -> 0.0534173 ± 0.00331758
+-----------------------------
+
+-----------------------------
+side: 20 | beta: 0.425
+-----------------------------
+ --- energy error: 
+Initial sample dimension: 2100
+k steps 1 -> -1.30794 ± 0.00390597
+k steps 2 -> -1.30794 ± 0.00475395
+Final sample dimension: 525
+ --- magnet error: 
+Initial sample dimension: 2100
+k steps 1 -> 0.543369 ± 0.0067031
+k steps 2 -> 0.543369 ± 0.00895663
+Final sample dimension: 525
+ --- heat error / V : 
+correl lenght 2 -> 0.0217791 ± 0.000654975
+correl lenght 4 -> 0.0216713 ± 0.000698233
+correl lenght 8 -> 0.0216317 ± 0.000740492
+correl lenght 16 -> 0.0214611 ± 0.000752528
+correl lenght 32 -> 0.0217771 ± 0.00075901
+correl lenght 64 -> 0.0215677 ± 0.000669002
+correl lenght 128 -> 0.021599 ± 0.000722497
+ --- chi error / V : 
+correl lenght 2 -> 0.0508721 ± 0.00194325
+correl lenght 4 -> 0.0508412 ± 0.00231753
+correl lenght 8 -> 0.0514726 ± 0.00308741
+correl lenght 16 -> 0.0502541 ± 0.00283302
+correl lenght 32 -> 0.0516401 ± 0.00315187
+correl lenght 64 -> 0.0519083 ± 0.00387024
+correl lenght 128 -> 0.0522072 ± 0.00378988
+-----------------------------
+
+-----------------------------
+side: 20 | beta: 0.43
+-----------------------------
+ --- energy error: 
+Initial sample dimension: 2100
+k steps 1 -> -1.34121 ± 0.00414392
+k steps 2 -> -1.34121 ± 0.00518829
+Final sample dimension: 525
+ --- magnet error: 
+Initial sample dimension: 2100
+k steps 1 -> 0.568419 ± 0.00687604
+k steps 2 -> 0.568419 ± 0.00928381
+Final sample dimension: 525
+ --- heat error / V : 
+correl lenght 2 -> 0.0236226 ± 0.000788022
+correl lenght 4 -> 0.0237258 ± 0.000717075
+correl lenght 8 -> 0.0236186 ± 0.000825862
+correl lenght 16 -> 0.0237059 ± 0.000739339
+correl lenght 32 -> 0.0235709 ± 0.000866476
+correl lenght 64 -> 0.0234994 ± 0.000858337
+correl lenght 128 -> 0.0235889 ± 0.000685024
+ --- chi error / V : 
+correl lenght 2 -> 0.053849 ± 0.00183057
+correl lenght 4 -> 0.053731 ± 0.00220778
+correl lenght 8 -> 0.0529278 ± 0.0026321
+correl lenght 16 -> 0.0538922 ± 0.00265969
+correl lenght 32 -> 0.0532465 ± 0.00317746
+correl lenght 64 -> 0.0519579 ± 0.00371837
+correl lenght 128 -> 0.0529203 ± 0.003877
+-----------------------------
+
+-----------------------------
+side: 20 | beta: 0.435
+-----------------------------
+ --- energy error: 
+Initial sample dimension: 2100
+k steps 1 -> -1.3872 ± 0.00413259
+k steps 2 -> -1.3872 ± 0.0050862
+Final sample dimension: 525
+ --- magnet error: 
+Initial sample dimension: 2100
+k steps 1 -> 0.622471 ± 0.00648846
+k steps 2 -> 0.622471 ± 0.00868475
+Final sample dimension: 525
+ --- heat error / V : 
+correl lenght 2 -> 0.0235334 ± 0.00071332
+correl lenght 4 -> 0.0239079 ± 0.000785929
+correl lenght 8 -> 0.0235612 ± 0.00102784
+correl lenght 16 -> 0.0237792 ± 0.00101694
+correl lenght 32 -> 0.023352 ± 0.000878723
+correl lenght 64 -> 0.0234464 ± 0.00112978
+correl lenght 128 -> 0.0238061 ± 0.00130771
+ --- chi error / V : 
+correl lenght 2 -> 0.0479357 ± 0.00242207
+correl lenght 4 -> 0.0474568 ± 0.00263827
+correl lenght 8 -> 0.0471422 ± 0.0029298
+correl lenght 16 -> 0.048573 ± 0.00491382
+correl lenght 32 -> 0.0487487 ± 0.0059218
+correl lenght 64 -> 0.0462273 ± 0.00620948
+correl lenght 128 -> 0.0486075 ± 0.00641897
+-----------------------------
+
+-----------------------------
+side: 20 | beta: 0.44
+-----------------------------
+ --- energy error: 
+Initial sample dimension: 2100
+k steps 1 -> -1.42923 ± 0.00395634
+k steps 2 -> -1.42923 ± 0.00486293
+Final sample dimension: 525
+ --- magnet error: 
+Initial sample dimension: 2100
+k steps 1 -> 0.670355 ± 0.00592921
+k steps 2 -> 0.670355 ± 0.00788899
+Final sample dimension: 525
+ --- heat error / V : 
+correl lenght 2 -> 0.0218594 ± 0.000586307
+correl lenght 4 -> 0.022047 ± 0.000796537
+correl lenght 8 -> 0.0217993 ± 0.000648591
+correl lenght 16 -> 0.0220454 ± 0.000837039
+correl lenght 32 -> 0.021753 ± 0.000736082
+correl lenght 64 -> 0.0218137 ± 0.000708576
+correl lenght 128 -> 0.0219931 ± 0.00091353
+ --- chi error / V : 
+correl lenght 2 -> 0.0409876 ± 0.00218711
+correl lenght 4 -> 0.0403733 ± 0.00289418
+correl lenght 8 -> 0.0410204 ± 0.00336834
+correl lenght 16 -> 0.0417195 ± 0.00546825
+correl lenght 32 -> 0.0404072 ± 0.00505531
+correl lenght 64 -> 0.0401752 ± 0.00503585
+correl lenght 128 -> 0.0412638 ± 0.00445462
+-----------------------------
+
+-----------------------------
+side: 20 | beta: 0.445
+-----------------------------
+ --- energy error: 
+Initial sample dimension: 2100
+k steps 1 -> -1.47195 ± 0.00371258
+k steps 2 -> -1.47195 ± 0.00450811
+Final sample dimension: 525
+ --- magnet error: 
+Initial sample dimension: 2100
+k steps 1 -> 0.717233 ± 0.00527914
+k steps 2 -> 0.717233 ± 0.00704114
+Final sample dimension: 525
+ --- heat error / V : 
+correl lenght 2 -> 0.0198961 ± 0.000487771
+correl lenght 4 -> 0.0195328 ± 0.000754228
+correl lenght 8 -> 0.0197868 ± 0.000803698
+correl lenght 16 -> 0.0192278 ± 0.000786864
+correl lenght 32 -> 0.0197266 ± 0.00101258
+correl lenght 64 -> 0.0199153 ± 0.000824605
+correl lenght 128 -> 0.0196608 ± 0.000677005
+ --- chi error / V : 
+correl lenght 2 -> 0.031372 ± 0.00171644
+correl lenght 4 -> 0.0312557 ± 0.00287186
+correl lenght 8 -> 0.0327683 ± 0.00423338
+correl lenght 16 -> 0.0312212 ± 0.00430282
+correl lenght 32 -> 0.0313236 ± 0.00575368
+correl lenght 64 -> 0.0319984 ± 0.00449911
+correl lenght 128 -> 0.0337941 ± 0.00549688
+-----------------------------
+
+-----------------------------
+side: 20 | beta: 0.45
+-----------------------------
+ --- energy error: 
+Initial sample dimension: 2100
+k steps 1 -> -1.51377 ± 0.00346956
+k steps 2 -> -1.51377 ± 0.0041624
+Final sample dimension: 525
+ --- magnet error: 
+Initial sample dimension: 2100
+k steps 1 -> 0.758733 ± 0.00436275
+k steps 2 -> 0.758733 ± 0.005767
+Final sample dimension: 525
+ --- heat error / V : 
+correl lenght 2 -> 0.017779 ± 0.000420016
+correl lenght 4 -> 0.0176082 ± 0.000927181
+correl lenght 8 -> 0.0177513 ± 0.000991184
+correl lenght 16 -> 0.0176605 ± 0.00095824
+correl lenght 32 -> 0.0180014 ± 0.00134299
+correl lenght 64 -> 0.017761 ± 0.00127435
+correl lenght 128 -> 0.0177491 ± 0.0010961
+ --- chi error / V : 
+correl lenght 2 -> 0.0220638 ± 0.00172034
+correl lenght 4 -> 0.0223806 ± 0.00254319
+correl lenght 8 -> 0.0217335 ± 0.00228696
+correl lenght 16 -> 0.0212772 ± 0.00356385
+correl lenght 32 -> 0.0217184 ± 0.0045028
+correl lenght 64 -> 0.0224111 ± 0.00403225
+correl lenght 128 -> 0.0214869 ± 0.00432271
+-----------------------------
+
+-----------------------------
+side: 20 | beta: 0.455
+-----------------------------
+ --- energy error: 
+Initial sample dimension: 2100
+k steps 1 -> -1.5451 ± 0.00340757
+k steps 2 -> -1.5451 ± 0.00404806
+Final sample dimension: 525
+ --- magnet error: 
+Initial sample dimension: 2100
+k steps 1 -> 0.784217 ± 0.0040418
+k steps 2 -> 0.784217 ± 0.00531351
+Final sample dimension: 525
+ --- heat error / V : 
+correl lenght 2 -> 0.0169731 ± 0.000602614
+correl lenght 4 -> 0.017074 ± 0.000490233
+correl lenght 8 -> 0.0170028 ± 0.000849126
+correl lenght 16 -> 0.0169469 ± 0.00099801
+correl lenght 32 -> 0.0165774 ± 0.000992035
+correl lenght 64 -> 0.0169012 ± 0.00104486
+correl lenght 128 -> 0.0173154 ± 0.00105683
+ --- chi error / V : 
+correl lenght 2 -> 0.0199807 ± 0.00194705
+correl lenght 4 -> 0.0190273 ± 0.00220309
+correl lenght 8 -> 0.0192144 ± 0.00278517
+correl lenght 16 -> 0.0190941 ± 0.00379837
+correl lenght 32 -> 0.0191907 ± 0.00469205
+correl lenght 64 -> 0.0197162 ± 0.00362471
+correl lenght 128 -> 0.0188269 ± 0.00359084
+-----------------------------
+
+-----------------------------
+side: 20 | beta: 0.46
+-----------------------------
+ --- energy error: 
+Initial sample dimension: 2100
+k steps 1 -> -1.57801 ± 0.00297899
+k steps 2 -> -1.57801 ± 0.00336733
+Final sample dimension: 525
+ --- magnet error: 
+Initial sample dimension: 2100
+k steps 1 -> 0.815036 ± 0.00285372
+k steps 2 -> 0.815036 ± 0.00356352
+Final sample dimension: 525
+ --- heat error / V : 
+correl lenght 2 -> 0.0141818 ± 0.000470485
+correl lenght 4 -> 0.0142726 ± 0.000604211
+correl lenght 8 -> 0.0142734 ± 0.000642761
+correl lenght 16 -> 0.0142163 ± 0.000535083
+correl lenght 32 -> 0.0141925 ± 0.00058657
+correl lenght 64 -> 0.014136 ± 0.000743966
+correl lenght 128 -> 0.0143257 ± 0.00080931
+ --- chi error / V : 
+correl lenght 2 -> 0.0102382 ± 0.000869215
+correl lenght 4 -> 0.0102746 ± 0.0015214
+correl lenght 8 -> 0.0102016 ± 0.00181073
+correl lenght 16 -> 0.0107878 ± 0.0019602
+correl lenght 32 -> 0.0101071 ± 0.00190749
+correl lenght 64 -> 0.0103466 ± 0.00186863
+correl lenght 128 -> 0.0105699 ± 0.00164365
+-----------------------------
+
+-----------------------------
+side: 20 | beta: 0.465
+-----------------------------
+ --- energy error: 
+Initial sample dimension: 2100
+k steps 1 -> -1.60722 ± 0.00275035
+k steps 2 -> -1.60722 ± 0.00307211
+Final sample dimension: 525
+ --- magnet error: 
+Initial sample dimension: 2100
+k steps 1 -> 0.836938 ± 0.00224715
+k steps 2 -> 0.836938 ± 0.00270284
+Final sample dimension: 525
+ --- heat error / V : 
+correl lenght 2 -> 0.012453 ± 0.000389542
+correl lenght 4 -> 0.0124237 ± 0.000359819
+correl lenght 8 -> 0.0125742 ± 0.000507485
+correl lenght 16 -> 0.0125286 ± 0.000538984
+correl lenght 32 -> 0.0124993 ± 0.00062357
+correl lenght 64 -> 0.0125262 ± 0.000434726
+correl lenght 128 -> 0.0123924 ± 0.000432302
+ --- chi error / V : 
+correl lenght 2 -> 0.00680797 ± 0.000470088
+correl lenght 4 -> 0.00682777 ± 0.000511464
+correl lenght 8 -> 0.00673508 ± 0.000637814
+correl lenght 16 -> 0.00682294 ± 0.000617958
+correl lenght 32 -> 0.0069016 ± 0.000684496
+correl lenght 64 -> 0.00695693 ± 0.00093695
+correl lenght 128 -> 0.00697967 ± 0.000671116
+-----------------------------
+
+-----------------------------
+side: 20 | beta: 0.47
+-----------------------------
+ --- energy error: 
+Initial sample dimension: 2100
+k steps 1 -> -1.63531 ± 0.00257854
+k steps 2 -> -1.63531 ± 0.00283042
+Final sample dimension: 525
+ --- magnet error: 
+Initial sample dimension: 2100
+k steps 1 -> 0.854686 ± 0.00197568
+k steps 2 -> 0.854686 ± 0.00231937
+Final sample dimension: 525
+ --- heat error / V : 
+correl lenght 2 -> 0.0112602 ± 0.000400115
+correl lenght 4 -> 0.0112265 ± 0.000395975
+correl lenght 8 -> 0.0110876 ± 0.000305501
+correl lenght 16 -> 0.0111306 ± 0.000282954
+correl lenght 32 -> 0.0112549 ± 0.000335518
+correl lenght 64 -> 0.0112337 ± 0.000513332
+correl lenght 128 -> 0.0112865 ± 0.000411693
+ --- chi error / V : 
+correl lenght 2 -> 0.00535294 ± 0.000358723
+correl lenght 4 -> 0.00536578 ± 0.000447024
+correl lenght 8 -> 0.005701 ± 0.000707517
+correl lenght 16 -> 0.00545929 ± 0.000488219
+correl lenght 32 -> 0.00548998 ± 0.00064263
+correl lenght 64 -> 0.00547243 ± 0.000633747
+correl lenght 128 -> 0.00563107 ± 0.000782325
+-----------------------------
+
+-----------------------------
+side: 20 | beta: 0.475
+-----------------------------
+ --- energy error: 
+Initial sample dimension: 2100
+k steps 1 -> -1.65769 ± 0.00247216
+k steps 2 -> -1.65769 ± 0.00269466
+Final sample dimension: 525
+ --- magnet error: 
+Initial sample dimension: 2100
+k steps 1 -> 0.867164 ± 0.00175925
+k steps 2 -> 0.867164 ± 0.00201056
+Final sample dimension: 525
+ --- heat error / V : 
+correl lenght 2 -> 0.0106474 ± 0.000494619
+correl lenght 4 -> 0.0105701 ± 0.000362112
+correl lenght 8 -> 0.0106533 ± 0.000411648
+correl lenght 16 -> 0.0105778 ± 0.000412996
+correl lenght 32 -> 0.0106708 ± 0.00034861
+correl lenght 64 -> 0.0107208 ± 0.0004343
+correl lenght 128 -> 0.0105704 ± 0.000392366
+ --- chi error / V : 
+correl lenght 2 -> 0.0044686 ± 0.000304383
+correl lenght 4 -> 0.00444138 ± 0.000351881
+correl lenght 8 -> 0.00438733 ± 0.000405784
+correl lenght 16 -> 0.004397 ± 0.000375567
+correl lenght 32 -> 0.00451073 ± 0.000474751
+correl lenght 64 -> 0.00442026 ± 0.000389205
+correl lenght 128 -> 0.00450225 ± 0.000268892
+-----------------------------
+
+-----------------------------
+side: 20 | beta: 0.48
+-----------------------------
+ --- energy error: 
+Initial sample dimension: 2100
+k steps 1 -> -1.67737 ± 0.00243216
+k steps 2 -> -1.67737 ± 0.00269658
+Final sample dimension: 525
+ --- magnet error: 
+Initial sample dimension: 2100
+k steps 1 -> 0.876962 ± 0.00187259
+k steps 2 -> 0.876962 ± 0.00228667
+Final sample dimension: 525
+ --- heat error / V : 
+correl lenght 2 -> 0.0103447 ± 0.000454571
+correl lenght 4 -> 0.010255 ± 0.000378074
+correl lenght 8 -> 0.0101466 ± 0.000551721
+correl lenght 16 -> 0.0103609 ± 0.000629605
+correl lenght 32 -> 0.0103117 ± 0.000515293
+correl lenght 64 -> 0.0103968 ± 0.000671725
+correl lenght 128 -> 0.0105643 ± 0.000594694
+ --- chi error / V : 
+correl lenght 2 -> 0.00487978 ± 0.000600552
+correl lenght 4 -> 0.00453656 ± 0.00073361
+correl lenght 8 -> 0.00485272 ± 0.00116169
+correl lenght 16 -> 0.0050472 ± 0.00105041
+correl lenght 32 -> 0.00502747 ± 0.00098583
+correl lenght 64 -> 0.00429423 ± 0.000907345
+correl lenght 128 -> 0.00510218 ± 0.00106304
+-----------------------------
+

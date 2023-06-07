@@ -25,14 +25,14 @@ using namespace std;
 *******************************************************************************/
 
 #define SIDE_SEP 10
-#define SIDE_MIN 20
-#define SIDE_MAX 60
+#define SIDE_MIN 10
+#define SIDE_MAX 70
 // #define SIDE_MIN 70
 // #define SIDE_MAX 71
 
-#define BETA_SEP 0.0025
-#define BETA_INI 0.3600
-#define BETA_FIN 0.5100
+#define BETA_SEP 0.0050
+#define BETA_INI 0.3800
+#define BETA_FIN 0.4800
 // #define BETA_SEP 0.0010
 // #define BETA_INI 0.4153
 // #define BETA_FIN 0.4500
