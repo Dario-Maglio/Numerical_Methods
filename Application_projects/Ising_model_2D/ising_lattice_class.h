@@ -19,11 +19,8 @@
 
 using namespace std;
 
-// Define the PRNG
-//#define SEED 42
-//mt19937_64 generator(SEED);
-random_device device;
-mt19937_64 generator(device());
+#define SEED 42
+//random_device device;
 
 // Define precise constants
 constexpr double pi = 3.14159265358979323846;
@@ -36,6 +33,9 @@ private:
     int tot_lenght_;
     vector<int> lattice_;
     vector<vector<int>> nearest_neighbors_;
+
+    // Define the PRNG
+    mt19937_64 generator_;
 
 public:
     const int side_lenght, geometry_flag, initial_flag;
@@ -61,6 +61,8 @@ public:
         geometry_flag(G_FLAG),
         initial_flag(I_FLAG)
         {// CONSTRUCTION BEGIN
+
+        mt19937_64 generator_(SEED);
 
         double random_number;
         vector<int> nearest_list;
@@ -150,15 +152,15 @@ public:
     int rand_int(){
         /* Generate a random index for the lattice */
 
-        uniform_int_distribution<long int> randomint(0, tot_lenght_ - 1);
-        return randomint(generator);
+        uniform_int_distribution<long int> random_int(0, tot_lenght_ - 1);
+        return random_int(generator_);
     }
 
     double rand_double(){
         /* Generate a random double */
 
-        uniform_real_distribution<double> prng(0.0, 1.0);
-        return prng(generator);
+        uniform_real_distribution<double> random_flt(0.0, 1.0);
+        return random_flt(generator_);
     }
 
     double energy(double extfield){
@@ -208,22 +210,38 @@ public:
         }
     }
 
-    void save_configuration(string file_state = "ising_state.dat"){
-        /* Save the current configuration */
+    void save_configuration(string file_state = "test_ising"){
+        /* Save the current configuration of lattice and generator */
 
         ofstream file;
-        file.open(file_state);
+        file.open(file_state + "_state.dat");
         for (int i = 0; i < tot_lenght_; i++){
             file << lattice_[i] << endl;
         }
         file.close();
+
+        ofstream file_seed;
+        file_seed.open(file_state + "_seed.dat");
+        file_seed << generator_;
+        file_seed.close();
+
     }
 
-    void load_configuration(string file_state = "ising_state.dat"){
-        /* Load configuration from path */
+    void load_configuration(string file_state = "test_ising"){
+        /* Load configuration and seed from file */
+
+        ifstream file_seed(file_state + "_seed.dat");
+        cout << "Loading initial seed..." << endl;
+        if (file_seed.is_open()) {
+            file_seed >> generator_;
+            file_seed.close();
+        } else {
+            cerr << "Error: unable to open the seed file." << endl;
+            exit(1);
+        }
 
         int i = 0;
-        ifstream file(file_state);
+        ifstream file(file_state + "_state.dat");
         cout << "Loading initial configuration..." << endl;
         if (file.is_open()) {
             while((file >> lattice_[i]) && (i < tot_lenght_)) i++;
@@ -237,6 +255,7 @@ public:
             cerr << "Error: different number of sites." << endl;
             exit(1);
         }
+
     }
 
     void show_nearest_index(const int &index){

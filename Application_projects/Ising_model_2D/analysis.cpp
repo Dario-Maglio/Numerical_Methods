@@ -59,9 +59,9 @@ mt19937_64 generator(SEED);
 
 #define BLOCKS 6
 #define MIN_CORR_LENGHT 2
-#define MAX_CORR_LENGHT 256
+#define MAX_CORR_LENGHT 512
 #define NUM_FAKE_SAMP 300
-#define DIM_FAKE_SAMP 10000
+#define DIM_FAKE_SAMP 150000
 
 //--- Contents -----------------------------------------------------------------
 

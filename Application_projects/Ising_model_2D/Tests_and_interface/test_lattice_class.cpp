@@ -32,7 +32,7 @@ using namespace std;
 *
 *******************************************************************************/
 
-#define SIDE 70
+#define SIDE 50
 #define G_FLAG 2
 #define I_FLAG 2
 
@@ -59,18 +59,18 @@ using namespace std;
 int main(){
     /* Test the methods of the lattice Class. */
 
-    string file_path;
+    string file_name;
     double ener, magn;
     lattice ising(SIDE, G_FLAG, I_FLAG);
 
-    file_path = "test_ising_state.dat";
+    file_name = "test_ising";
     cout << "Running with beta = " << BETA << endl;
     if(I_FLAG == 2){
         // Loading configuration
-        ising.load_configuration(file_path);
+        ising.load_configuration(file_name);
     } else {
         // Thermalization phase
-        for(int i = 0; i < (100 * I_DECORREL); i++) ising.update(BETA, EXTFIELD);
+        for(int i = 0; i < (100*I_DECORREL); i++) ising.update(BETA, EXTFIELD);
     }
     cout << "Ready to go!" << endl;
 
@@ -101,5 +101,5 @@ int main(){
     ising.show_configuration();
 
     // Save configuration
-    ising.save_configuration(file_path);
+    ising.save_configuration(file_name);
 }

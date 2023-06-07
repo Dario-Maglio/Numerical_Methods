@@ -40,10 +40,10 @@ using namespace std;
 *******************************************************************************/
 
 #define G_FLAG 2
-#define I_FLAG 2
+#define I_FLAG 1
 #define EXTFIELD 0.
 #define I_DECORREL 10
-#define MEASURES 50000
+#define MEASURES 1000
 
 //--- Contents -----------------------------------------------------------------
 
@@ -51,16 +51,16 @@ void run_simulation(int side, float beta){
     /* MC-simulation for a given side and beta */
 
     ofstream file;
-    string directory, name_file_data, name_file_state, message;
+    string directory, name_file, name_file_data, name_file_state, message;
     lattice ising(side, G_FLAG, I_FLAG);
 
     // Define path data directory
-    directory = "Data_simulations/Side_" + to_string(side) + "/";
+    directory = "Data_simulations_2/Side_" + to_string(side) + "/";
     // Define name file simulation for a given side and beta
-    name_file_data = "side_" + to_string(side) +
-                     "_beta_" + to_string(beta) + ".dat";
+    name_file = "side_" + to_string(side) + "_beta_" + to_string(beta)
+    name_file_data =  name_file + ".dat";
     // Define name file last configuration of the lattice
-    name_file_state = "state_" + name_file_data;
+    name_file_state = "state_" + name_file;
 
     // Prepare the lattice for the simulation
     if(I_FLAG == 2){
