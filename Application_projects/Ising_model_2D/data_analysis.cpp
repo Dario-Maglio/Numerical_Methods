@@ -31,14 +31,19 @@ mt19937_64 generator(SEED);
 #define DATA 8
 #define SIDE_SEP 10
 #define SIDE_MIN 10
-#define SIDE_MAX 60
+#define SIDE_MAX 70
 
+// define outer betas -> 20 points
 #define BETA_SEP 0.0050
-#define BETA_INI 0.3800
+#define BETA_INI 0.3600
 #define BETA_FIN 0.4800
-#define BETA_C_SEP 0.0010
-#define BETA_C_INI 0.4153
-#define BETA_C_FIN 0.4500
+// define inner betas -> 50 points
+#define BETA_C_SEP 0.00050
+#define BETA_C_INI 0.41525
+#define BETA_C_FIN 0.44000
+
+#define BETA_CUM_MIN 0.4000
+#define BETA_CUM_MAX 0.4800
 
 /*******************************************************************************
 * PARAMETERS OF THE ANALYSIS
@@ -199,7 +204,7 @@ void file_operations(int side, float beta, vector<double>& data, ofstream &file_
     string file_name;
     vector<double> energies, magnetis;
 
-    file_name = "Data_simulations_trial/Side_" + to_string(side) + "/side_";
+    file_name = "Data_simulations/Side_" + to_string(side) + "/side_";
     file_name += to_string(side) + "_beta_" + to_string(beta) + ".dat";
     ifstream file(file_name);
 
@@ -263,7 +268,7 @@ void cumulant_analysis(float beta){
     ofstream file_data, file_analysis;
 
     // define the output path of the files
-    file_path = "Data_analysis_trial/cumulant_beta_" + to_string(beta);
+    file_path = "Data_analysis/cumulant_beta_" + to_string(beta);
     // open the data and logging files
     file_name =  file_path + "_analysis.txt";
     cout << "Creating file: " << file_name << endl;
@@ -276,7 +281,7 @@ void cumulant_analysis(float beta){
     for(int side = SIDE_MIN; side <= SIDE_MAX; side += SIDE_SEP){
 
         // open the simulation data file
-        file_name = "Data_simulations_trial/Side_" + to_string(side) + "/side_";
+        file_name = "Data_simulations/Side_" + to_string(side) + "/side_";
         file_name += to_string(side) + "_beta_" + to_string(beta) + ".dat";
         ifstream file(file_name);
 
@@ -330,7 +335,7 @@ void partial_analysis(){
     cout << "Insert side lenght: ";
     cin >>  side_in;
     cout << endl;
-    file_path = "Data_analysis_trial/side_" + to_string(side_in);
+    file_path = "Data_analysis/side_" + to_string(side_in);
     // open the data and logging files
     file_name =  file_path + "_analysis.txt";
     cout << "Creating file: " << file_name << endl;
@@ -376,7 +381,7 @@ void complete_analysis(){
     for(int side = SIDE_MIN; side <= SIDE_MAX; side += SIDE_SEP){
 
         // define the path
-        file_path = "Data_analysis_trial/side_" + to_string(side);
+        file_path = "Data_analysis/side_" + to_string(side);
         // open the data and logging files
         file_name =  file_path + "_analysis.txt";
         cout << "Creating file: " << file_name << endl;
@@ -393,13 +398,13 @@ void complete_analysis(){
             file_data << endl;
         }
         // begin loop over inner betas
-        // file_analysis << "\n\nBegin loop over central betas\n";
-        // for(float beta = BETA_C_INI; beta <= BETA_C_FIN; beta += BETA_C_SEP){
-        //     file_operations(side, beta, data, file_analysis);
-        //     file_data << beta << " ";
-        //     for(int i = 0; i < DATA; i++) file_data << data[i] << " ";
-        //     file_data << endl;
-        // }
+        file_analysis << "\n\nBegin loop over central betas\n";
+        for(float beta = BETA_C_INI; beta <= BETA_C_FIN; beta += BETA_C_SEP){
+            file_operations(side, beta, data, file_analysis);
+            file_data << beta << " ";
+            for(int i = 0; i < DATA; i++) file_data << data[i] << " ";
+            file_data << endl;
+        }
 
         file_data.close();
         file_analysis.close();
@@ -414,8 +419,8 @@ int main(){
     //partial_analysis();
     complete_analysis();
 
-    cumulant_analysis(BETA_INI);
-    cumulant_analysis(BETA_FIN);
+    cumulant_analysis(BETA_CUM_MIN);
+    cumulant_analysis(BETA_CUM_MAX);
 
     cout << "The work is done." << endl << endl;
 }

@@ -43,7 +43,7 @@ using namespace std;
 #define I_FLAG 2
 #define EXTFIELD 0.
 #define I_DECORREL 10
-#define MEASURES 100
+#define MEASURES 2000
 
 //--- Contents -----------------------------------------------------------------
 
@@ -55,7 +55,7 @@ void run_simulation(int side, float beta){
     lattice ising(side, G_FLAG, I_FLAG);
 
     // Define path data directory
-    directory = "Data_simulations_trial/Side_" + to_string(side) + "/";
+    directory = "Data_simulations/Side_" + to_string(side) + "/";
     // Define name file last configuration of the lattice
     name_file_state = "side_" + to_string(side) + "_beta_" + to_string(beta);
     // Define name file simulation for a given side and beta
