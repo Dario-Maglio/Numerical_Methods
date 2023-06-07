@@ -51,9 +51,9 @@ int main(){
       for(float beta = BETA_INI; beta <= BETA_FIN; beta += BETA_SEP){
          threadPool.emplace_back([side, beta]() {run_simulation(side, beta); });
       }
-      // for(float beta = BETA_C_INI; beta <= BETA_C_FIN; beta += BETA_C_SEP){
-      //    threadPool.emplace_back([side, beta]() {run_simulation(side, beta); });
-      // }
+      for(float beta = BETA_C_INI; beta <= BETA_C_FIN; beta += BETA_C_SEP){
+         threadPool.emplace_back([side, beta]() {run_simulation(side, beta); });
+      }
 
     }
 
