@@ -42,7 +42,7 @@ mt19937_64 generator(SEED);
 #define BETA_C_INI 0.41525
 #define BETA_C_FIN 0.44000
 
-#define BETA_CUM_MIN 0.4000
+#define BETA_CUM_MIN 0.3800
 #define BETA_CUM_MAX 0.4800
 
 /*******************************************************************************

@@ -9,7 +9,7 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
-from uncertainties import ufloat
+from uncertainties import ufloat, unumpy
 
 #*******************************************************************************
 # PARAMETERS OF THE SIMULATION
@@ -19,19 +19,24 @@ from uncertainties import ufloat
 #*******************************************************************************
 
 SIDE_MIN = 20
-SIDE_MAX = 60
+SIDE_MAX = 70
 SIDE_SEP = 10
 
 sides = np.arange(SIDE_MIN, SIDE_MAX + 1, SIDE_SEP, dtype='int')
+logsides = np.log(sides)
 
-interval_chi = {20:(20,40), 30:(28,48), 40:(34,54), 50:(38,58), 60:(40,60)}
-interval_cal = {20:(26,46), 30:(33,55), 40:(40,60), 50:(43,63), 60:(46,66)}
-interval_mag = {20:(38,58), 30:(38,58), 40:(38,58), 50:(38,58), 60:(38,58)}
+interval_chi = {20:(11,40), 30:(11,60), 40:(11,64),
+                50:(38,58), 60:(40,63), 70:(46,64)}
+interval_cal = {20:(11,46), 30:(11,55), 40:(11,64),
+                50:(43,63), 60:(40,63), 70:(46,64)}
+interval_mag = {20:(11,58), 30:(11,58), 40:(11,64),
+                50:(38,58), 60:(40,63), 70:(46,64)}
 
 #--- Contents ------------------------------------------------------------------
 
 def fit_lin(x, a, b):
-    y = a * np.pow(x, 1) + b
+    y = a * np.power(x, 1) + b
+    return y
 
 def fit_par(x, a, b, c):
     y = a * np.power(x, 2) + b * np.power(x, 1) + c
@@ -54,7 +59,7 @@ def fit_cal(x, a, b):
     return y
 
 def load_data():
-    """ Load data produced by analysis.cpp """
+    """ Load data produced by analysis """
 
     data = {}
     for side in sides:
@@ -108,7 +113,7 @@ def parabolic_fit_chi(data):
 
     for side in sides:
         # select chi data to fit
-        x, _, _, _, _, _, _, y, y_err, _, _ = data[side]
+        x, _, _, _, _, _, _, y, y_err = data[side]
         x, y, y_err = zip(*sorted(zip(x, y, y_err)))
         a = interval_chi[side][0]
         b = interval_chi[side][1]
@@ -134,7 +139,7 @@ def parabolic_fit_cal(data):
 
     for side in sides:
         # select cal data to fit
-        x, _, _, _, _, y, y_err, _, _, _, _ = data[side]
+        x, _, _, _, _, y, y_err, _, _ = data[side]
         x, y, y_err = zip(*sorted(zip(x, y, y_err)))
         a = interval_cal[side][0]
         b = interval_cal[side][1]
@@ -161,7 +166,7 @@ def plot_par_chi(x, y, y_err, a, b, parameters, title):
     plt.title(title)
     plt.ylabel(r'$ \chi $')
     plt.xlabel(r'$ \beta $')
-    plt.xlim([x[a-5], x[b+5]])
+    plt.xlim([0.40, 0.45])
     # plot data and fit in function of beta
     fit_x = np.linspace(x[a], x[b], 100)
     fit_y = fit_par(fit_x, *parameters)
@@ -183,7 +188,7 @@ def plot_par_cal(x, y, y_err, a, b, parameters, title):
     plt.title(title)
     plt.ylabel(r'$ C_V $')
     plt.xlabel(r'$ \beta $')
-    plt.xlim([x[a-5], x[b+5]])
+    plt.xlim([0.40, 0.45])
     # plot data and fit in function of beta
     fit_x = np.linspace(x[a], x[b], 100)
     fit_y = fit_par(fit_x, *parameters)
@@ -201,7 +206,7 @@ def plot_par_cal(x, y, y_err, a, b, parameters, title):
 def mag_fit(fit_x, fit_y, fit_e, beta):
     """ Get mag evalueted in beta_cr with fit """
 
-    # fit the parabola
+    # fit the magnetization
     parameters, covariance = curve_fit(fit_lin, fit_x, fit_y, sigma=fit_e)
     std_deviation = np.sqrt(np.diag(covariance))
     # print values and uncertainties
@@ -212,13 +217,14 @@ def mag_fit(fit_x, fit_y, fit_e, beta):
     print(par_b)
     # compute mag_cr
     print("Critical magnetization:")
-    mag_cr = par_a * beta + par_b
+    mag_cri = par_a * beta + par_b
+    print(mag_cri)
     # compute reduced chi squared
-    fitted_y = fit_par(fit_x, *parameters)
+    fitted_y = fit_lin(fit_x, *parameters)
     chisq = np.sum(np.power(((fit_y - fitted_y)/ fit_e), 2))
     chisqrd = chisq / (len(fit_x) - 3)
     print(f"Reduced chi squared: \n{chisqrd}\n")
-    return (mag_cr, parameters)
+    return (mag_cri, parameters)
 
 def plot_mag(x, y, y_err, a, b, parameters, title):
     """ Plot fit for mag """
@@ -229,7 +235,7 @@ def plot_mag(x, y, y_err, a, b, parameters, title):
     plt.title(title)
     plt.ylabel(r'$ \langle | M | \rangle $')
     plt.xlabel(r'$ \beta $')
-    plt.xlim([x[a-5], x[b+5]])
+    plt.xlim([0.40, 0.45])
     # plot data and fit in function of beta
     fit_x = np.linspace(x[a], x[b], 100)
     fit_y = fit_lin(fit_x, *parameters)
@@ -256,7 +262,7 @@ def critical_fit_mag(data, beta):
         b = interval_mag[side][1]
         # fit and append
         print(f"Magnetization side {side}")
-        mag_val, parameters = mag_fit(x[a:b], y[a:b], y_err[a:b])
+        mag_val, parameters = mag_fit(x[a:b], y[a:b], y_err[a:b], beta)
         mag_cri.append(mag_val.n)
         mag_err.append(mag_val.std_dev)
         # plot data and fit
@@ -292,11 +298,11 @@ def critical_point(beta_pc, beta_er):
     nu_exp = 1 / par_b
     return (beta_cr, nu_exp, parameters)
 
-def critical_ratio(y_max, y_err, function):
-    """ Get critical exponent ratio fitting a given function """
+def critical_ratio(logy, loge):
+    """ Get critical exponent ratio fitting a linear function """
 
-    # exponential fit
-    parameters, covariance = curve_fit(function, sides, y_max, sigma=y_err)
+    # fit
+    parameters, covariance = curve_fit(fit_lin, logsides, logy, sigma=loge)
     std_deviation = np.sqrt(np.diag(covariance))
     # print values and uncertainties
     print("Fit parameters:")
@@ -305,12 +311,12 @@ def critical_ratio(y_max, y_err, function):
     par_b = ufloat(parameters[1], std_deviation[1])
     print(par_b)
     # compute reduced chi squared
-    fitted_y = function(sides, *parameters)
-    chisq = np.sum(np.power(((y_max - fitted_y)/ y_err), 2))
+    fitted_y = fit_lin(logsides, *parameters)
+    chisq = np.sum(np.power(((logy - fitted_y)/ loge), 2))
     chisqrd = chisq / (len(sides) - 3)
     print(f"Reduced chi squared: \n{chisqrd}")
     # compute results
-    ratio = par_b
+    ratio = par_a
     return (ratio, parameters)
 
 #--- Plot subroutines ----------------------------------------------------------
@@ -406,14 +412,18 @@ if __name__ == '__main__':
     data = load_data()
     print("Loading complete! \n")
 
-    print("Start parabolic fit for chi and cal !\n")
+    #--- Parabolic fit
+    print("--- Start parabolic fit for chi and cal -----\n")
+
     beta_pc, beta_er, chi_max, chi_err = parabolic_fit_chi(data)
     cal_max, cal_err = parabolic_fit_cal(data)
 
-    print("--- Study the critical point and exponents --------")
+    #--- Critical point
+    print("--- Study the critical point ----------------\n")
 
     print("Study pseudo critical beta")
     beta_cr, nu_exp, parameters = critical_point(beta_pc, beta_er)
+
     print("\nCritical beta:")
     print(beta_cr)
     print("Critical exponent nu:")
@@ -422,38 +432,60 @@ if __name__ == '__main__':
     print("\nPlot beta_pc as a function of L\n")
     plot_beta_critical(beta_pc, beta_er, parameters)
 
-    #---Critical ratio gamma
+    #------ Critical ratios
+    print("--- Study the critical ratios ---------------\n")
+
+    #--- Critical ratio gamma
     print("Study chi_max")
-    ratio, parameters = critical_ratio(chi_max, chi_err, fit_chi)
-    gamma_exp = nu_exp * ratio
+    # format data in log scale
+    uy = [ ufloat(val, err) for val, err in zip(chi_max, chi_err)]
+    print(uy)
+    loguy = unumpy.log(uy)
+    print(loguy)
+    logy = [val.n for val in loguy]
+    loge = [val.std_dev for val in loguy]
+    # fit the data
+    ratio, parameters = critical_ratio(logy, loge)
+    # compute exponent
     print("\nCritical exponent gamma:")
+    gamma_exp = nu_exp * ratio
     print(gamma_exp)
-
+    # plot results
     print("\nPlot chi_max as a function of L\n")
-    plot_critical_chi(chi_max, chi_err, parameters)
+    #plot_critical_chi(chi_max, chi_err, parameters)
 
-    #---Critical ratio beta
+    #--- Critical ratio beta
     print("Study critical mag")
-
+    # get magnetization data
     mag_cri, mag_err = critical_fit_mag(data, beta_cr)
-    ratio, parameters = critical_ratio(mag_cri, mag_err, fit_mag)
-
+    # format data in log scale
+    uy = [ ufloat(val, err) for val, err in zip(mag_cri, mag_err)]
+    loguy = unumpy.log(uy)
+    logy = [logval.n for logval in loguy]
+    loge = [logval.std_deviation for logval in loguy]
+    # fit the data
+    ratio, parameters = critical_ratio(logy, loge)
+    # compute exponent
+    print("\nCritical exponent beta:")
     beta_exp = nu_exp * ratio
-    print("\nCritical ratio:")
-    print(ratio)
-    print("Critical exponent beta:")
     print(beta_exp)
-
+    # plot results
     print("\nPlot mag_max as a function of L\n")
-    plot_critical_mag(mag_max, mag_err, parameters)
+    #plot_critical_mag(mag_max, mag_err, parameters)
 
     #---Critical ratio alpha
     print("Study cal_max")
-
-    ratio, parameters = critical_ratio(cal_max, cal_err, fit_cal)
-    alpha_exp = nu_exp * ratio
+    # format data in log scale
+    uy = [ ufloat(val, err) for val, err in zip(cal_max, cal_err)]
+    loguy = unumpy.log(uy)
+    logy = [logval.n for logval in loguy]
+    loge = [logval.std_deviation for logval in loguy]
+    # fit the data
+    ratio, parameters = critical_ratio(logy, loge)
+    # compute exponent
     print("\nCritical exponent alpha:")
+    alpha_exp = nu_exp * ratio
     print(alpha_exp)
-
+    # plot results
     print("\nPlot chi_max as a function of L\n")
-    plot_critical_cal(cal_max, cal_err, parameters)
+    #plot_critical_cal(cal_max, cal_err, parameters)
