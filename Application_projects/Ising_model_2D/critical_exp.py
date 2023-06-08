@@ -25,12 +25,12 @@ SIDE_SEP = 10
 sides = np.arange(SIDE_MIN, SIDE_MAX + 1, SIDE_SEP, dtype='int')
 logsides = np.log(sides)
 
-interval_chi = {20:(11,40), 30:(11,60), 40:(11,64),
+interval_chi = {20:(11,40), 30:(11,60), 40:(21,64),
                 50:(38,58), 60:(40,63), 70:(46,64)}
-interval_cal = {20:(11,46), 30:(11,55), 40:(11,64),
-                50:(43,63), 60:(40,63), 70:(46,64)}
-interval_mag = {20:(11,58), 30:(11,58), 40:(11,64),
-                50:(38,58), 60:(40,63), 70:(46,64)}
+interval_cal = {20:(21,56), 30:(35,64), 40:(46,66),
+                50:(43,66), 60:(50,66), 70:(50,66)}
+interval_mag = {20:(11,58), 30:(11,58), 40:(21,54),
+                50:(21,54), 60:(40,63), 70:(46,64)}
 
 #--- Contents ------------------------------------------------------------------
 
@@ -268,7 +268,7 @@ def critical_fit_mag(data, beta):
         # plot data and fit
         title = f"Fit max magnetization side: {side} "
         print(title + "\n")
-        plot_par_mag(x, y, y_err, a, b, parameters, title)
+        plot_mag(x, y, y_err, a, b, parameters, title)
 
     return mag_cri, mag_err
 
@@ -439,9 +439,7 @@ if __name__ == '__main__':
     print("Study chi_max")
     # format data in log scale
     uy = [ ufloat(val, err) for val, err in zip(chi_max, chi_err)]
-    print(uy)
     loguy = unumpy.log(uy)
-    print(loguy)
     logy = [val.n for val in loguy]
     loge = [val.std_dev for val in loguy]
     # fit the data
@@ -454,38 +452,38 @@ if __name__ == '__main__':
     print("\nPlot chi_max as a function of L\n")
     #plot_critical_chi(chi_max, chi_err, parameters)
 
-    #--- Critical ratio beta
-    print("Study critical mag")
-    # get magnetization data
-    mag_cri, mag_err = critical_fit_mag(data, beta_cr)
-    # format data in log scale
-    uy = [ ufloat(val, err) for val, err in zip(mag_cri, mag_err)]
-    loguy = unumpy.log(uy)
-    logy = [logval.n for logval in loguy]
-    loge = [logval.std_deviation for logval in loguy]
-    # fit the data
-    ratio, parameters = critical_ratio(logy, loge)
-    # compute exponent
-    print("\nCritical exponent beta:")
-    beta_exp = nu_exp * ratio
-    print(beta_exp)
-    # plot results
-    print("\nPlot mag_max as a function of L\n")
-    #plot_critical_mag(mag_max, mag_err, parameters)
-
     #---Critical ratio alpha
     print("Study cal_max")
     # format data in log scale
     uy = [ ufloat(val, err) for val, err in zip(cal_max, cal_err)]
     loguy = unumpy.log(uy)
     logy = [logval.n for logval in loguy]
-    loge = [logval.std_deviation for logval in loguy]
+    loge = [logval.std_dev for logval in loguy]
     # fit the data
     ratio, parameters = critical_ratio(logy, loge)
     # compute exponent
     print("\nCritical exponent alpha:")
-    alpha_exp = nu_exp * ratio
+    alpha_exp = - nu_exp * ratio
     print(alpha_exp)
     # plot results
     print("\nPlot chi_max as a function of L\n")
     #plot_critical_cal(cal_max, cal_err, parameters)
+
+    #--- Critical ratio beta
+    print("--- Study the critical ratio of beta --------\n")
+    # get magnetization data
+    mag_cri, mag_err = critical_fit_mag(data, beta_cr)
+    # format data in log scale
+    uy = [ ufloat(val, err) for val, err in zip(mag_cri, mag_err)]
+    loguy = unumpy.log(uy)
+    logy = [logval.n for logval in loguy]
+    loge = [logval.std_dev for logval in loguy]
+    # fit the data
+    ratio, parameters = critical_ratio(logy, loge)
+    # compute exponent
+    print("\nCritical exponent beta:")
+    beta_exp = - nu_exp * ratio
+    print(beta_exp)
+    # plot results
+    print("\nPlot mag_max as a function of L\n")
+    #plot_critical_mag(mag_max, mag_err, parameters)

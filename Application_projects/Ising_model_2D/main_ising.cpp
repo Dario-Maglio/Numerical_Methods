@@ -30,7 +30,7 @@ using namespace std;
 // #define SIDE_MIN 70
 // #define SIDE_MAX 71
 
-// define outer betas -> 20 points
+// define outer betas -> 24 points
 #define BETA_SEP 0.0050
 #define BETA_INI 0.3600
 #define BETA_FIN 0.4800

@@ -21,7 +21,7 @@ SIDE_SEP = 10
 SIDE_MIN = 10
 SIDE_MAX = 70
 
-BETA_INI = 0.4000
+BETA_INI = 0.3800
 BETA_FIN = 0.4800
 
 sides = np.arange(SIDE_MIN, SIDE_MAX+1, SIDE_SEP, dtype='int')
@@ -126,9 +126,9 @@ def cumulant(beta):
 
     #---Load points
     recL, cumulan, cum_err = load_cumulant(beta)
-    recL = 1 / recL[1:]
-    cumulan = cumulan[1:]
-    cum_err = cum_err[1:]
+    recL = 1 / recL[2:]
+    cumulan = cumulan[2:]
+    cum_err = cum_err[2:]
 
     #---Fit
     parameters, covariance = curve_fit(fit_fun, recL, cumulan, sigma=cum_err)
@@ -155,11 +155,12 @@ def cumulant(beta):
     plt.ylabel(r'$ C_B $')
     plt.xlabel(r'$ 1 / L $')
     # points and function
-    fit_x = np.linspace(0., 0.051, 100)
+    fit_x = np.linspace(0., recL[0], 100)
     fit_y = fit_fun(fit_x, fit_a, fit_b)
     fit_label = f'fit {fit_b:.6f} ± {fit_db:.6f}'
     plt.plot(fit_x, fit_y, '-', label=fit_label)
-    plt.errorbar(recL, cumulan, yerr=cum_err, fmt='<',label=f'beta: {beta}')
+    sim_label = f'beta: {beta} | min side: {sides[2]}'
+    plt.errorbar(recL, cumulan, yerr=cum_err, fmt='<',label=sim_label)
     # save and show
     plt.legend(loc='upper right')
     plt.savefig(os.path.join("Plots_and_fit", title + ".png"))

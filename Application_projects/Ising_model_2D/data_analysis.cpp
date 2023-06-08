@@ -26,6 +26,8 @@ mt19937_64 generator(SEED);
 *
 * SIDE_SEP = separation between the sides of different simulations.
 *
+* BETA_CUM = beta used to produce cumulant data and plots.
+*
 *******************************************************************************/
 
 #define DATA 8
@@ -33,7 +35,7 @@ mt19937_64 generator(SEED);
 #define SIDE_MIN 10
 #define SIDE_MAX 70
 
-// define outer betas -> 20 points
+// define outer betas -> 24 points
 #define BETA_SEP 0.0050
 #define BETA_INI 0.3600
 #define BETA_FIN 0.4800
@@ -41,7 +43,7 @@ mt19937_64 generator(SEED);
 #define BETA_C_SEP 0.00050
 #define BETA_C_INI 0.41525
 #define BETA_C_FIN 0.44000
-
+// define cumulant betas
 #define BETA_CUM_MIN 0.3800
 #define BETA_CUM_MAX 0.4800
 
@@ -60,11 +62,11 @@ mt19937_64 generator(SEED);
 *
 *******************************************************************************/
 
-#define BLOCKS 4
+#define BLOCKS 6
 #define MIN_CORR_LENGHT 2
-#define MAX_CORR_LENGHT 256
-#define NUM_FAKE_SAMP 10
-#define DIM_FAKE_SAMP 5000
+#define MAX_CORR_LENGHT 512
+#define NUM_FAKE_SAMP 150
+#define DIM_FAKE_SAMP 50000
 
 //--- Contents -----------------------------------------------------------------
 
@@ -261,7 +263,6 @@ void file_operations(int side, float beta, vector<double>& data, ofstream &file_
 void cumulant_analysis(float beta){
     /* Compute Binder Cumulant and its error */
 
-    int measures = 0;
     double ene, mag;
     string file_path, file_name;
     vector<double> magnetis;
@@ -288,7 +289,6 @@ void cumulant_analysis(float beta){
         if (file.is_open()) {
             // load data and compute averages
             while (file >> ene >> mag){
-                measures++;
                 mag = abs(mag);
                 magnetis.push_back(mag);
             }
@@ -305,6 +305,8 @@ void cumulant_analysis(float beta){
             file_data << binder(magnetis) << " ";
             file_data << bootstrap_corr(magnetis, &binder, file_analysis);
             file_data << endl;
+
+            magnetis.clear();
 
             file_analysis << "-----------------------------" << endl << endl;
         } else {
