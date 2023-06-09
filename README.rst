@@ -29,8 +29,8 @@ Here you can find notes and codes about:
 Materials come from different sources, but most are from the "Metodi Numerici" course at the University of Pisa and the "Fisica Computazionale" course at the University of Salerno. All sources are cited in the documentation and in the README file of each directory.
 
 
-Be careful in managing the above material: bugs are behind the corner!
+Be careful in handling the above material: bugs are behind the corner!
 
 .. image:: https://raw.githubusercontent.com/Dario-Maglio/Numerical_methods/main/varie/bug.png
-  :width: 800
+  :width: 600
   :alt: Alternative text
