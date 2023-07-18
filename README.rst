@@ -47,6 +47,7 @@ Here are some of the plots generated from the programs:
 
 - Gershgorin circles for the exact diagonalization of a real nxn matrix:
 
+
   .. image:: https://github.com/Dario-Maglio/Numerical_Methods/blob/2e34ab69b7adffbca9cbc024247dff65279cebd6/Application_projects/Eigenvalues_matrices/Gershgorin_circles.jpg/Metropolis/MC_gaussian_averages.png
      :align: center
 
