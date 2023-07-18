@@ -50,6 +50,7 @@ Here are some of the plots generated from the programs:
 
   .. image:: https://github.com/Dario-Maglio/Numerical_Methods/blob/b68e6651ec3a54303ffaf3a4a1b25403fcff0c0d/Application_projects/Eigenvalues_matrices/Gershgorin_circles.jpg
      :align: center
+     :width: 80%
 
 
 - Monte Carlo simulation of the Gaussian distribution:
@@ -60,5 +61,14 @@ Here are some of the plots generated from the programs:
 
 - Ito vs Stratonovich Stochastic integration:
 
-  .. image:: https://github.com/Dario-Maglio/Numerical_Methods/blob/2e34ab69b7adffbca9cbc024247dff65279cebd6/Monte_Carlo_and_PRNG/Metropolis/MC_gaussian_averages.png
+  .. image:: https://github.com/Dario-Maglio/Numerical_Methods/blob/a2d5b68ce50644a6b08dd9c407aafe567134b1d9/ODE_SDE_and_PDE_methods/SDE_soultion.png
      :align: center
+
+-------
+
+License
+=======
+
+This repository is licensed under the GNU General Public License v3.0 (GPL-3.0). 
+
+See the LICENSE file for more information.
