@@ -1,3 +1,4 @@
+=============================
 Numerical Methods for Physics
 =============================
 
@@ -29,8 +30,34 @@ Here you can find notes and codes about:
 Materials come from different sources, but most are from the "Metodi Numerici" course at the University of Pisa and the "Fisica Computazionale" course at the University of Salerno. All sources are cited in the documentation and in the README file of each directory.
 
 
-Be careful in handling the above material: bugs are behind the corner!
+Examples
+--------
 
-.. image:: https://raw.githubusercontent.com/Dario-Maglio/Numerical_methods/main/varie/bug.png
-  :width: 600
-  :alt: Alternative text
+Here are some of the plots generated from the programs:
+
+- damped double pendulum:
+
+  .. image:: https://github.com/Dario-Maglio/Numerical_Methods/blob/2e34ab69b7adffbca9cbc024247dff65279cebd6/Application_projects/Double_pendulum/Casistica/A_B/A_B%20angoli%20uguali.png
+     :align: center
+     :width: 80%
+
+  .. image:: https://github.com/Dario-Maglio/Numerical_Methods/blob/2e34ab69b7adffbca9cbc024247dff65279cebd6/Application_projects/Double_pendulum/Casistica/A_B/Schermata%20del%202018-06-20%2012-35-26.png
+     :align: center
+     :width: 80%
+
+- Gershgorin circles for the exact diagonalization of a real nxn matrix:
+
+  .. image:: https://github.com/Dario-Maglio/Numerical_Methods/blob/2e34ab69b7adffbca9cbc024247dff65279cebd6/Application_projects/Eigenvalues_matrices/Gershgorin_circles.jpg/Metropolis/MC_gaussian_averages.png
+     :align: center
+
+
+- Monte Carlo simulation of the Gaussian distribution:
+
+  .. image:: https://github.com/Dario-Maglio/Numerical_Methods/blob/2e34ab69b7adffbca9cbc024247dff65279cebd6/Monte_Carlo_and_PRNG/Metropolis/MC_gaussian_averages.png
+     :align: center
+
+
+
+
+
+
