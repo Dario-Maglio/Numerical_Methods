@@ -58,7 +58,7 @@ Here are some of the plots generated from the programs:
      :align: center
 
 
+- Ito vs Stratonovich Stochastic integration:
 
-
-
-
+  .. image:: https://github.com/Dario-Maglio/Numerical_Methods/blob/2e34ab69b7adffbca9cbc024247dff65279cebd6/Monte_Carlo_and_PRNG/Metropolis/MC_gaussian_averages.png
+     :align: center
